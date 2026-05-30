@@ -710,8 +710,8 @@ class ESNController extends GetxController {
       );
     }
 
-    // current  5A
-    else if (typeStr.contains("currentta")) {
+    // current  5A  ta
+    else if (typeStr.contains("current5A")) {
       print("⚡ [MODE] CURRENT SENSOR");
 
       LogFile.write("⚡ [MODE] CURRENT SENSOR");
@@ -773,8 +773,8 @@ class ESNController extends GetxController {
       );
     }
 
-    // cureent 20A
-    else if (typeStr.contains("currentfa")) {
+    // cureent 20A  fa
+    else if (typeStr.contains("current20A")) {
       print("⚡ [MODE] CURRENT SENSOR");
 
       LogFile.write("⚡ [MODE] CURRENT SENSOR");
