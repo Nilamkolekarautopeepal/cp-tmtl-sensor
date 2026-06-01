@@ -407,7 +407,7 @@ class DashboardController extends GetxController {
 
       final token =
           await AppPreferences.getToken();
-
+print("...............................$token");
       // =================================================
       // URL
       // =================================================

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:cp_tmtl_sensor_zig/AppPreferences/app_areferences.dart';
 import 'package:cp_tmtl_sensor_zig/api/app_envirments.dart';
 import 'package:cp_tmtl_sensor_zig/api/app_urls.dart';
@@ -375,7 +374,7 @@ class LoginController extends GetxController {
   static Future<Map<String, String>> getAuthHeaders() async {
     final token = await AppPreferences.getToken();
     return {
-      'Authorization': 'Bearer $token', // ✅ Bearer not JWT
+      'Authorization': 'JWT $token', // ✅ Bearer not JWT
       'Content-Type': 'application/json',
     };
   }
