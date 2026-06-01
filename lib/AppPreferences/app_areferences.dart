@@ -7,6 +7,7 @@ class AppPreferences {
   static const String _currentUserIdKey = 'active_user_id';
   static const String _userRecipePrefix = 'recipes_for_user_'; // Unique prefix
   static const String _tokenKey = 'auth_token';
+  static const String _refreshTokenKey = 'refresh_token';
 
   // ================= SESSION MANAGEMENT =================
 
@@ -28,6 +29,23 @@ class AppPreferences {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_currentUserIdKey);
   }
+
+  static Future<void> setRefreshToken(String token) async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setString(_refreshTokenKey, token);
+  print("🔄 [PREFS] Refresh token saved");
+}
+
+static Future<String?> getRefreshToken() async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getString(_refreshTokenKey);
+}
+
+static Future<void> clearRefreshToken() async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.remove(_refreshTokenKey);
+  print("🗑️ [PREFS] Refresh token cleared");
+}
  
 
   // ================= USER-SPECIFIC RECIPES =================
