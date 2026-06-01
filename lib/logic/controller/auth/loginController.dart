@@ -114,23 +114,38 @@ class LoginController extends GetxController {
         LogFile.write("💾 [LOGIN] Credentials saved for: $user");
         final Map<String, dynamic> data = jsonDecode(response.body);
 
-        final String? token = data['data']['accessToken'];
+        // final String? token = data['data']['accessToken'];
+        //  final String? token = data['data']['auth_token']['access'];
+        //   if (token != null) {
+        //     await AppPreferences.setToken(token);
+        //     print("🔑 [TOKEN] Saved: $token");
+        //     LogFile.write("🔑 [TOKEN] Saved: $token");
+
+        //   }
+        final String? token = data['data']['auth_token']['access'];
+        final String? refreshToken = data['data']['auth_token']['refresh'];
+
         if (token != null) {
           await AppPreferences.setToken(token);
           print("🔑 [TOKEN] Saved: $token");
           LogFile.write("🔑 [TOKEN] Saved: $token");
+        }
 
+        if (refreshToken != null) {
+          await AppPreferences.setRefreshToken(
+              refreshToken); // add this method if not exists
         }
 
         await AppPreferences.setActiveUser(user);
         print("👤 [SESSION] Active User set: $user");
-         LogFile.write("👤 [SESSION] Active User set: $user");
+        LogFile.write("👤 [SESSION] Active User set: $user");
 
         if (Get.isRegistered<TestRecipeController>()) {
           final testController = Get.find<TestRecipeController>();
           await testController.loadStoredRecipes();
           print("🔄 [SYNC] Recipes: ${testController.recipeList.length}");
-          LogFile.write("🔄 [SYNC] Recipes: ${testController.recipeList.length}");
+          LogFile.write(
+              "🔄 [SYNC] Recipes: ${testController.recipeList.length}");
         }
 
         isLoading.value = false;
