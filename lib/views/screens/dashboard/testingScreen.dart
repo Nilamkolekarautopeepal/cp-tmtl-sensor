@@ -237,9 +237,14 @@ class TestingScreen extends StatelessWidget {
                         decoration: BoxDecoration(color: Colors.grey[200]),
                         child: Row(
                           children: [
-                            const SizedBox(width: 40), // expand icon space
+                            const SizedBox(width: 40),
+                            _buildHeaderCell(
+                              "Sr.No",
+                              tableCellFontSize,
+                              flex: 1,
+                            ), // expand icon space
                             _buildHeaderCell("Register", tableCellFontSize,
-                                flex: 1),
+                                flex: 2),
                             _buildHeaderCell("Component", tableCellFontSize,
                                 flex: 4),
                             _buildHeaderCell("Min", tableCellFontSize, flex: 2),
@@ -286,9 +291,16 @@ class TestingScreen extends StatelessWidget {
                                                 .toggleSensorExpanded(key),
                                           ),
                                   ),
+                                  _buildFlexCell(
+                                    (controller.sensorResults.indexOf(sensor) +
+                                            1)
+                                        .toString(),
+                                    tableCellFontSize,
+                                    flex: 1,
+                                  ),
                                   _buildFlexCell(sensor['reg'].toString(),
                                       tableCellFontSize,
-                                      flex: 1),
+                                      flex: 2),
                                   _buildFlexCell(
                                       sensor['part'], tableCellFontSize,
                                       flex: 4, align: TextAlign.left),

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:cp_tmtl_sensor_zig/AppPreferences/app_areferences.dart';
 import 'package:cp_tmtl_sensor_zig/api/app_envirments.dart';
 import 'package:cp_tmtl_sensor_zig/api/app_urls.dart';
@@ -45,81 +44,20 @@ class LoginController extends GetxController {
   }
 
   void login() async {
+    String user = usernameController.value.text;
+    String pass = passwordController.value.text;
 
-  String user = usernameController.value.text;
-
-  String pass = passwordController.value.text;
-
-  // ==========================================
-  // VALIDATION
-  // ==========================================
-  if (user.isEmpty || pass.isEmpty) {
-
-    Get.snackbar(
-      "Error",
-      "Please enter credentials",
-      backgroundColor: Colors.redAccent,
-      colorText: Colors.white,
-    );
-
-    return;
-  }
-
-  try {
-
-    isLoading.value = true;
-
-    print("🚀 [LOGIN START] Authenticating: $user");
-
-    print("🔐 PASSWORD : $pass");
-
-    final String baseUrl =
-        AppEnvironment.baseUrl;
-
-    final String loginUrl =
-        "$baseUrl${AppURLs.login}";
-
-    print("🌐 [API] URL : $loginUrl");
-
-    // ==========================================
-    // API CALL
-    // ==========================================
-    final response = await http.post(
-
-      Uri.parse(loginUrl),
-
-      headers: {
-
-        "Content-Type":
-            "application/x-www-form-urlencoded",
-
-        "Accept": "application/json",
-      },
-
-      body: {
-
-        "username": user,
-
-        "password": pass,
-      },
-    );
-
-    print(
-      "📡 [RESPONSE] STATUS : ${response.statusCode}",
-    );
-
-    print(
-      "📡 [RESPONSE] BODY : ${response.body}",
-    );
-
-    // ==========================================
-    // RESPONSE PARSE
-    // ==========================================
-    Map<String, dynamic> parsedResponse = {};
+    if (user.isEmpty || pass.isEmpty) {
+      Get.snackbar(
+        "Error",
+        "Please enter credentials",
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+      );
+      return;
+    }
 
     try {
-<<<<<<< HEAD
-=======
       isLoading.value = true;
 
       print("🚀 [LOGIN START] Authenticating: $user");
@@ -132,136 +70,42 @@ class LoginController extends GetxController {
       final String loginUrl = "$baseUrl${AppURLs.login}";
       print("🌐 [API] Hitting: $loginUrl");
       LogFile.write("🌐 [API] Hitting: $loginUrl");
->>>>>>> 6b1cd888468667c4f7094515450f46a55b54e13c
 
-      parsedResponse =
-          jsonDecode(response.body);
-
-    } catch (_) {
-
-      parsedResponse = {
-        "raw": response.body
-      };
-    }
-
-    parsedResponse['statusCode'] =
-        response.statusCode;
-
-    // ==========================================
-    // DEV LOG
-    // ==========================================
-    DevService.instance.insertAPICall(
-
-      AppAPIsCall(
-
-        id:
-            "${DateTime.now().millisecondsSinceEpoch} ${DateTime.now().toIso8601String()}",
-
-        type:
-            'POST ${response.statusCode}',
-
-        path: AppURLs.login,
-
-        dateTime: DateTime.now(),
-
-        data: {
-          "username": user,
-          "password": "***",
+      // ✅ Use form encoding — Django REST expects this by default
+      final response = await http.post(
+        Uri.parse(loginUrl),
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Accept": "application/json",
         },
-
-        response: parsedResponse,
-      ),
-    );
-
-    // ==========================================
-    // SUCCESS
-    // ==========================================
-    if (response.statusCode == 200) {
-
-      await AppPreferences.saveUsername(user);
-
-      await AppPreferences.savePassword(pass);
-
-      print(
-        "💾 [LOGIN] Credentials saved",
+        body: {
+          "username": user,
+          "password": pass,
+        },
       );
 
-<<<<<<< HEAD
-      final Map<String, dynamic> data =
-          jsonDecode(response.body);
-=======
       print("📡 [RESPONSE] Status: ${response.statusCode}");
       print("📡 [RESPONSE] Body: ${response.body}");
       LogFile.write("📡 [RESPONSE] Status: ${response.statusCode}");
       LogFile.write("📡 [RESPONSE] Body: ${response.body}");
->>>>>>> 6b1cd888468667c4f7094515450f46a55b54e13c
 
-      // ==========================================
-      // AUTH TOKEN
-      // ==========================================
-      final Map<String, dynamic> authToken =
-          data['data']['auth_token'] ?? {};
-
-      // ACCESS TOKEN
-      final String? token =
-          authToken['access']
-              ?.toString();
-
-      // REFRESH TOKEN
-      final String? refreshToken =
-          authToken['refresh']
-              ?.toString();
-
-      print(
-        "🔑 ACCESS TOKEN : $token",
-      );
-
-      print(
-        "🔄 REFRESH TOKEN : $refreshToken",
-      );
-
-      // ==========================================
-      // SAVE TOKEN
-      // ==========================================
-      if (token != null) {
-
-        await AppPreferences.setToken(
-          token,
-        );
-
-        print(
-          "✅ ACCESS TOKEN SAVED",
-        );
+      Map<String, dynamic> parsedResponse = {};
+      try {
+        parsedResponse = jsonDecode(response.body);
+      } catch (_) {
+        parsedResponse = {"raw": response.body};
       }
+      parsedResponse['statusCode'] = response.statusCode;
 
-      // ==========================================
-      // ACTIVE USER
-      // ==========================================
-      await AppPreferences.setActiveUser(
-        user,
-      );
+      DevService.instance.insertAPICall(AppAPIsCall(
+        id: "${DateTime.now().millisecondsSinceEpoch} ${DateTime.now().toIso8601String()}",
+        type: 'POST ${response.statusCode}',
+        path: AppURLs.login,
+        dateTime: DateTime.now(),
+        data: {"username": user, "password": "***"}, // ✅ password masked
+        response: parsedResponse,
+      ));
 
-<<<<<<< HEAD
-      print(
-        "👤 ACTIVE USER : $user",
-      );
-
-      // ==========================================
-      // LOAD RECIPES
-      // ==========================================
-      if (Get.isRegistered<
-          TestRecipeController>()) {
-
-        final testController =
-            Get.find<TestRecipeController>();
-
-        await testController
-            .loadStoredRecipes();
-
-        print(
-          "🔄 RECIPES : ${testController.recipeList.length}",
-        );
-=======
       if (response.statusCode == 200) {
         await AppPreferences.saveUsername(user);
         await AppPreferences.savePassword(pass);
@@ -269,23 +113,38 @@ class LoginController extends GetxController {
         LogFile.write("💾 [LOGIN] Credentials saved for: $user");
         final Map<String, dynamic> data = jsonDecode(response.body);
 
-        final String? token = data['data']['accessToken'];
+        // final String? token = data['data']['accessToken'];
+        //  final String? token = data['data']['auth_token']['access'];
+        //   if (token != null) {
+        //     await AppPreferences.setToken(token);
+        //     print("🔑 [TOKEN] Saved: $token");
+        //     LogFile.write("🔑 [TOKEN] Saved: $token");
+
+        //   }
+        final String? token = data['data']['auth_token']['access'];
+        final String? refreshToken = data['data']['auth_token']['refresh'];
+
         if (token != null) {
           await AppPreferences.setToken(token);
           print("🔑 [TOKEN] Saved: $token");
           LogFile.write("🔑 [TOKEN] Saved: $token");
+        }
 
+        if (refreshToken != null) {
+          await AppPreferences.setRefreshToken(
+              refreshToken); // add this method if not exists
         }
 
         await AppPreferences.setActiveUser(user);
         print("👤 [SESSION] Active User set: $user");
-         LogFile.write("👤 [SESSION] Active User set: $user");
+        LogFile.write("👤 [SESSION] Active User set: $user");
 
         if (Get.isRegistered<TestRecipeController>()) {
           final testController = Get.find<TestRecipeController>();
           await testController.loadStoredRecipes();
           print("🔄 [SYNC] Recipes: ${testController.recipeList.length}");
-          LogFile.write("🔄 [SYNC] Recipes: ${testController.recipeList.length}");
+          LogFile.write(
+              "🔄 [SYNC] Recipes: ${testController.recipeList.length}");
         }
 
         isLoading.value = false;
@@ -308,218 +167,49 @@ class LoginController extends GetxController {
         Get.snackbar(
             "Server Error", "Something went wrong. (${response.statusCode})",
             backgroundColor: Colors.orange, colorText: Colors.white);
->>>>>>> 6b1cd888468667c4f7094515450f46a55b54e13c
       }
-
+    } on SocketException {
+      DevService.instance.insertAPICall(AppAPIsCall(
+        id: "${DateTime.now().millisecondsSinceEpoch} ${DateTime.now().toIso8601String()}",
+        type: 'POST ERROR',
+        path: AppURLs.login,
+        dateTime: DateTime.now(),
+        data: {"username": user, "password": "***"},
+        response: {
+          "error": "SocketException",
+          "message": "No internet connection"
+        },
+      ));
       isLoading.value = false;
-
-      Get.offAllNamed(
-        Routes.dashboardScreen,
-      );
-    }
-
-    // ==========================================
-    // BAD REQUEST
-    // ==========================================
-    else if (response.statusCode == 400) {
-
+      Get.snackbar("No Connection", "Check your internet and try again",
+          backgroundColor: Colors.redAccent, colorText: Colors.white);
+    } on TimeoutException {
+      DevService.instance.insertAPICall(AppAPIsCall(
+        id: "${DateTime.now().millisecondsSinceEpoch} ${DateTime.now().toIso8601String()}",
+        type: 'POST TIMEOUT',
+        path: AppURLs.login,
+        dateTime: DateTime.now(),
+        data: {"username": user, "password": "***"},
+        response: {"error": "TimeoutException", "message": "Request timed out"},
+      ));
       isLoading.value = false;
-
-      final Map<String, dynamic> errData =
-          jsonDecode(response.body);
-
-      final String errMsg =
-          errData['error'] ??
-              errData['detail'] ??
-              "Invalid request";
-
-      print(
-        "❌ LOGIN 400 : $errMsg",
-      );
-
-      Get.snackbar(
-        "Login Failed",
-        errMsg,
-        backgroundColor:
-            Colors.redAccent,
-        colorText: Colors.white,
-      );
-    }
-
-    // ==========================================
-    // UNAUTHORIZED
-    // ==========================================
-    else if (response.statusCode == 401) {
-
+      Get.snackbar("Timeout", "Server took too long to respond",
+          backgroundColor: Colors.orange, colorText: Colors.white);
+    } catch (e) {
+      DevService.instance.insertAPICall(AppAPIsCall(
+        id: "${DateTime.now().millisecondsSinceEpoch} ${DateTime.now().toIso8601String()}",
+        type: 'POST TIMEOUT',
+        path: AppURLs.login,
+        dateTime: DateTime.now(),
+        data: {"username": user, "password": "***"},
+        response: {"error": "TimeoutException", "message": "Request timed out"},
+      ));
       isLoading.value = false;
-<<<<<<< HEAD
-
-      Get.snackbar(
-        "Login Failed",
-        "Invalid email or password",
-        backgroundColor:
-            Colors.redAccent,
-        colorText: Colors.white,
-      );
-    }
-
-    // ==========================================
-    // SERVER ERROR
-    // ==========================================
-    else {
-
-      isLoading.value = false;
-
-      Get.snackbar(
-        "Server Error",
-        "Something went wrong (${response.statusCode})",
-        backgroundColor:
-            Colors.orange,
-        colorText: Colors.white,
-      );
-=======
       print("❌ [LOGIN ERROR] $e");
       LogFile.write("❌ [LOGIN ERROR] $e");
       Get.snackbar("Login Failed", "An error occurred during login");
->>>>>>> 6b1cd888468667c4f7094515450f46a55b54e13c
     }
   }
-
-  // ==========================================
-  // INTERNET ERROR
-  // ==========================================
-  on SocketException {
-
-    DevService.instance.insertAPICall(
-
-      AppAPIsCall(
-
-        id:
-            "${DateTime.now().millisecondsSinceEpoch} ${DateTime.now().toIso8601String()}",
-
-        type: 'POST ERROR',
-
-        path: AppURLs.login,
-
-        dateTime: DateTime.now(),
-
-        data: {
-          "username": user,
-          "password": "***"
-        },
-
-        response: {
-
-          "error": "SocketException",
-
-          "message":
-              "No internet connection"
-        },
-      ),
-    );
-
-    isLoading.value = false;
-
-    Get.snackbar(
-      "No Connection",
-      "Check your internet and try again",
-      backgroundColor:
-          Colors.redAccent,
-      colorText: Colors.white,
-    );
-  }
-
-  // ==========================================
-  // TIMEOUT
-  // ==========================================
-  on TimeoutException {
-
-    DevService.instance.insertAPICall(
-
-      AppAPIsCall(
-
-        id:
-            "${DateTime.now().millisecondsSinceEpoch} ${DateTime.now().toIso8601String()}",
-
-        type: 'POST TIMEOUT',
-
-        path: AppURLs.login,
-
-        dateTime: DateTime.now(),
-
-        data: {
-          "username": user,
-          "password": "***"
-        },
-
-        response: {
-
-          "error": "TimeoutException",
-
-          "message":
-              "Request timed out"
-        },
-      ),
-    );
-
-    isLoading.value = false;
-
-    Get.snackbar(
-      "Timeout",
-      "Server took too long to respond",
-      backgroundColor:
-          Colors.orange,
-      colorText: Colors.white,
-    );
-  }
-
-  // ==========================================
-  // EXCEPTION
-  // ==========================================
-  catch (e) {
-
-    DevService.instance.insertAPICall(
-
-      AppAPIsCall(
-
-        id:
-            "${DateTime.now().millisecondsSinceEpoch} ${DateTime.now().toIso8601String()}",
-
-        type: 'POST EXCEPTION',
-
-        path: AppURLs.login,
-
-        dateTime: DateTime.now(),
-
-        data: {
-          "username": user,
-          "password": "***"
-        },
-
-        response: {
-
-          "error": "Exception",
-
-          "message": e.toString()
-        },
-      ),
-    );
-
-    isLoading.value = false;
-
-    print(
-      "❌ LOGIN ERROR : $e",
-    );
-
-    Get.snackbar(
-      "Login Failed",
-      "An error occurred during login",
-      backgroundColor:
-          Colors.redAccent,
-      colorText: Colors.white,
-    );
-  }
-}
 
   void login1() async {
     String user = usernameController.value.text;
@@ -595,6 +285,7 @@ class LoginController extends GetxController {
 
         // ✅ Extract from data object
         final Map<String, dynamic> data = body['data'];
+
         final String? accessToken = data['accessToken'];
         final int? userId = data['userId'];
         final String? firstName = data['firstName'];
@@ -698,7 +389,7 @@ class LoginController extends GetxController {
   static Future<Map<String, String>> getAuthHeaders() async {
     final token = await AppPreferences.getToken();
     return {
-      'Authorization': 'Bearer $token', // ✅ Bearer not JWT
+      'Authorization': 'JWT $token', // ✅ Bearer not JWT
       'Content-Type': 'application/json',
     };
   }

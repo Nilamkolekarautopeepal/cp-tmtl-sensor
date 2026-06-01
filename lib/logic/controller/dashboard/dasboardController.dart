@@ -284,8 +284,7 @@ class DashboardController extends GetxController {
 
   final RxInt selectedModelIndex = 0.obs;
 
-  final RxMap<String, dynamic> selectedModel =
-      <String, dynamic>{}.obs;
+  final RxMap<String, dynamic> selectedModel = <String, dynamic>{}.obs;
 
   // =====================================================
   // STATIC MODELS
@@ -309,7 +308,7 @@ class DashboardController extends GetxController {
 
     loadAppInfo();
 
-   fetchDashboardData();
+    fetchDashboardData();
   }
 
   // =====================================================
@@ -338,8 +337,7 @@ class DashboardController extends GetxController {
     selectedModelIndex.value = index;
 
     if (index < engineModels.length) {
-      selectedModel.value =
-          Map<String, dynamic>.from(
+      selectedModel.value = Map<String, dynamic>.from(
         engineModels[index],
       );
     }
@@ -405,15 +403,13 @@ class DashboardController extends GetxController {
       // TOKEN
       // =================================================
 
-      final token =
-          await AppPreferences.getToken();
-
+      final token = await AppPreferences.getToken();
+      print("...............................$token");
       // =================================================
       // URL
       // =================================================
 
-      final url =
-          "http://139.59.76.174:8080/api/v1/support/traceability/test";
+      final url = "http://139.59.76.174:8080/api/v1/support/traceability/test";
 
       // =================================================
       // DATE
@@ -421,8 +417,7 @@ class DashboardController extends GetxController {
 
       final now = DateTime.now();
 
-      final fromDate =
-          now.subtract(
+      final fromDate = now.subtract(
         const Duration(days: 30),
       );
 
@@ -461,12 +456,9 @@ class DashboardController extends GetxController {
           .post(
             Uri.parse(url),
             headers: {
-              "Content-Type":
-                  "application/json",
-              "Accept":
-                  "application/json",
-              "Authorization":
-                  "JWT $token",
+              "Content-Type": "application/json",
+              "Accept": "application/json",
+              "Authorization": "JWT $token",
             },
             body: jsonEncode(
               requestBody,
@@ -500,29 +492,23 @@ class DashboardController extends GetxController {
       // DEV LOGGER
       // =================================================
 
-      Map<String, dynamic> parsedResponse =
-          {};
+      Map<String, dynamic> parsedResponse = {};
 
       try {
-        parsedResponse =
-            jsonDecode(response.body);
+        parsedResponse = jsonDecode(response.body);
       } catch (_) {
         parsedResponse = {
           "raw": response.body,
         };
       }
 
-      parsedResponse['statusCode'] =
-          response.statusCode;
+      parsedResponse['statusCode'] = response.statusCode;
 
       DevService.instance.insertAPICall(
         AppAPIsCall(
-          id:
-              "${DateTime.now().millisecondsSinceEpoch} ${DateTime.now().toIso8601String()}",
-          type:
-              'POST ${response.statusCode}',
-          path:
-              '/api/v1/support/traceability/test',
+          id: "${DateTime.now().millisecondsSinceEpoch} ${DateTime.now().toIso8601String()}",
+          type: 'POST ${response.statusCode}',
+          path: '/api/v1/support/traceability/test',
           dateTime: DateTime.now(),
           data: requestBody,
           response: parsedResponse,
@@ -534,51 +520,39 @@ class DashboardController extends GetxController {
       // =================================================
 
       if (response.statusCode == 200) {
-        final data =
-            jsonDecode(response.body);
+        final data = jsonDecode(response.body);
 
-        if (data["responseStatus"] ==
-            "SUCCESS") {
+        if (data["responseStatus"] == "SUCCESS") {
           engineModels.clear();
 
           final list = data["data"] ?? [];
 
           for (var item in list) {
             engineModels.add({
-              "name":
-                  item["modelId"] ?? "-",
-              "total":
-                  item["totalTested"] ?? 0,
-              "today":
-                  item["todayTested"] ?? 0,
-              "pass":
-                  item["totalTestPass"] ?? 0,
-              "fail":
-                  item["totalTestFail"] ?? 0,
+              "name": item["modelId"] ?? "-",
+              "total": item["totalTested"] ?? 0,
+              "today": item["todayTested"] ?? 0,
+              "pass": item["totalTestPass"] ?? 0,
+              "fail": item["totalTestFail"] ?? 0,
             });
           }
 
           if (engineModels.isNotEmpty) {
             selectedModelIndex.value = 0;
 
-            selectedModel.value =
-                engineModels.first;
+            selectedModel.value = engineModels.first;
           }
 
           Get.snackbar(
             "Success",
-            data["messages"]?[0]
-                    ?["message"] ??
-                "Dashboard Loaded",
+            data["messages"]?[0]?["message"] ?? "Dashboard Loaded",
           );
         } else {
           loadDemoData();
 
           Get.snackbar(
             "Failed",
-            data["messages"]?[0]
-                    ?["message"] ??
-                "API Failed",
+            data["messages"]?[0]?["message"] ?? "API Failed",
           );
         }
       }

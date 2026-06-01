@@ -61,37 +61,6 @@ class PLCController extends GetxController {
     portController.text = port.toString();
   }
 
-  // --- 2. CONNECTION LOGIC ---
-  // Future<void> connectToPLC(String ip, String port) async {
-  //   if (isConnecting.value) return;
-  //   await _cleanupBeforeConnect();
-
-  //   int? portNum = int.tryParse(port);
-  //   if (portNum == null) return;
-
-  //   try {
-  //     isConnecting.value = true;
-  //     debugStatus.value = "Connecting...";
-  //     socket = await Socket.connect(ip, portNum,
-  //         timeout: const Duration(seconds: 4));
-  //     socket!.setOption(SocketOption.tcpNoDelay, true);
-
-  //     isConnected.value = true;
-  //     debugStatus.value = "Connected";
-
-  //     socket!.listen(
-  //       (data) => _handleResponse(data),
-  //       onError: (err) => disconnect(),
-  //       onDone: () => disconnect(),
-  //       cancelOnError: true,
-  //     );
-  //   } catch (e) {
-  //     debugStatus.value = "Connect Error";
-  //     disconnect();
-  //   } finally {
-  //     isConnecting.value = false;
-  //   }
-  // }
   Future<void> connectToPLC(String ip) async {
     if (isConnecting.value) return;
 
@@ -160,37 +129,6 @@ class PLCController extends GetxController {
     socket!.add(packet);
     _printHex("SENT", packet);
   }
-
-  // void _handleResponse(List<int> data) {
-  //   _printHex("RESPONSE", data);
-
-  //   if (data.length >= 11 && data[7] == 0x03) {
-  //     int rawValue = (data[9] << 8) | data[10];
-  //     print("Parsed VALUE: $rawValue");
-
-  //     // ✅ ROUTE TO ESN CONTROLLER (MAIN FIX)
-  //     if (Get.isRegistered<ESNController>() && currentRegister != null) {
-  //       final esnCtrl = Get.find<ESNController>();
-  //       esnCtrl.handlePlcData(currentRegister!, rawValue);
-  //     }
-
-  //     // OPTIONAL (keep your existing flows)
-  //     if (Get.isRegistered<SensorAnalysisController>()) {
-  //       Get.find<SensorAnalysisController>().addRealHardwarePoint(rawValue);
-  //     }
-
-  //     if (Get.isRegistered<AddRecipeController>()) {
-  //       final recipeCtrl = Get.find<AddRecipeController>();
-
-  //       double m = double.tryParse(recipeCtrl.multiplier.value.text) ?? 1.0;
-  //       double c = double.tryParse(recipeCtrl.offset.value.text) ?? 0.0;
-
-  //       double value = (rawValue * m) + c;
-
-  //       recipeCtrl.testResult.value.text = value.toStringAsFixed(2);
-  //     }
-  //   }
-  // }
 
   void _handleResponse(List<int> data) {
   _printHex("RESPONSE", data);

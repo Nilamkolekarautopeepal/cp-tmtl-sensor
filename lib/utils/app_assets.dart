@@ -23,10 +23,8 @@ class AppAssets {
   static const String lockIcon = '${svgPath}lock_icon.svg';
   static const String settingIcon = '${svgPath}setting_icon.svg';
   static const String logoutIcon = '${svgPath}logout_icon.svg';
-
   static const String wifiImage = '${imagePath}wifi_icon.png';
   static const String wifiOffImage = '${imagePath}wifi_off_icon.png';
-
   static const String settingImage = '${imagePath}setting_image.png';
   static const String linkImage = '${imagePath}link_icon.png';
   static const String scanIcon = '${svgPath}lucide_scan.svg';

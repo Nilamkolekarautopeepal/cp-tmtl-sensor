@@ -154,15 +154,11 @@ class ESNController extends GetxController {
           "operations": s.operations, // ✅ ADD THIS
         };
 
-<<<<<<< HEAD
-       print("📡 [SENSOR LOADED] reg=${map['reg']} | part=${map['part']} | type=${map['type']} | ops=${(map['operations'] as List).length}");
-=======
         print(
             "📡 [SENSOR LOADED] reg=${map['reg']} | part=${map['part']} | ops=${(map['operations'] as List).length}");
         LogFile.write(
             "📡 [SENSOR LOADED] reg=${map['reg']} | part=${map['part']} | ops=${(map['operations'] as List).length}");
 
->>>>>>> 6b1cd888468667c4f7094515450f46a55b54e13c
         return map;
       }).toList(),
     );
@@ -587,8 +583,7 @@ class ESNController extends GetxController {
     }
   }
 
-
-Future<void> pickFromGallery() async {
+  Future<void> pickFromGallery() async {
     try {
       await _safeStopStream();
       isScanning.value = false;
@@ -715,24 +710,8 @@ Future<void> pickFromGallery() async {
       );
     }
 
-<<<<<<< HEAD
+    // current  5A  ta
     else if (typeStr.contains("current5A")) {
-      print("⚡ [MODE] CURRENT SENSOR");
-
-      // STEP 1: Raw Input
-      print("🧩 STEP 1: Raw Input");
-      print("   -> Raw PLC Value: $rawX");
-
-      // STEP 2: Voltage conversion
-      double vout = rawX.toDouble() / 1000.0;
-      print("🧩 STEP 2: Voltage Conversion");
-      print("   -> Vout = rawX / 1000 = $vout V");
-
-      // STEP 3: Offset
-      double offset = 2.5;
-=======
-    // current  5A
-    else if (typeStr.contains("currentta")) {
       print("⚡ [MODE] CURRENT SENSOR");
 
       LogFile.write("⚡ [MODE] CURRENT SENSOR");
@@ -765,46 +744,20 @@ Future<void> pickFromGallery() async {
 
       double offset = 2.5;
 
->>>>>>> 6b1cd888468667c4f7094515450f46a55b54e13c
       print("🧩 STEP 3: Offset Removal");
       print("   -> Offset = $offset V");
       print("   -> Vout - Offset = ${vout - offset}");
 
-<<<<<<< HEAD
-      // STEP 4: Current Formula
-=======
       LogFile.write("🧩 STEP 3: Offset Removal");
       LogFile.write("   -> Offset = $offset V");
       LogFile.write("   -> Vout - Offset = ${vout - offset}");
 
       // STEP 4: Current Formula
 
->>>>>>> 6b1cd888468667c4f7094515450f46a55b54e13c
       print("🧩 STEP 4: Current Calculation");
       print("   -> Formula: I = (Vout - 2.5) / 0.185");
       print("   -> Substitution: ($vout - $offset) / 0.185");
 
-<<<<<<< HEAD
-      actualValue = (vout - offset) / 0.185;
-
-      print("   -> Result Current: ${actualValue.toStringAsFixed(4)} A");
-    }
-
-    else if (typeStr.contains("current20A")) {
-      print("⚡ [MODE] CURRENT SENSOR");
-
-      // STEP 1: Raw Input
-      print("🧩 STEP 1: Raw Input");
-      print("   -> Raw PLC Value: $rawX");
-
-      // STEP 2: Voltage conversion
-      double vout = rawX.toDouble() / 1000.0;
-      print("🧩 STEP 2: Voltage Conversion");
-      print("   -> Vout = rawX / 1000 = $vout V");
-
-      // STEP 3: Offset
-      double offset = 2.5;
-=======
       LogFile.write("🧩 STEP 4: Current Calculation");
       LogFile.write("   -> Formula: I = (Vout - 2.5) / 0.185");
       LogFile.write("   -> Substitution: ($vout - $offset) / 0.185");
@@ -820,8 +773,8 @@ Future<void> pickFromGallery() async {
       );
     }
 
-    // cureent 20A
-    else if (typeStr.contains("currentfa")) {
+    // cureent 20A  fa
+    else if (typeStr.contains("current20A")) {
       print("⚡ [MODE] CURRENT SENSOR");
 
       LogFile.write("⚡ [MODE] CURRENT SENSOR");
@@ -854,33 +807,20 @@ Future<void> pickFromGallery() async {
 
       double offset = 2.5;
 
->>>>>>> 6b1cd888468667c4f7094515450f46a55b54e13c
       print("🧩 STEP 3: Offset Removal");
       print("   -> Offset = $offset V");
       print("   -> Vout - Offset = ${vout - offset}");
 
-<<<<<<< HEAD
-      // STEP 4: Current Formula
-=======
       LogFile.write("🧩 STEP 3: Offset Removal");
       LogFile.write("   -> Offset = $offset V");
       LogFile.write("   -> Vout - Offset = ${vout - offset}");
 
       // STEP 4: Current Formula
 
->>>>>>> 6b1cd888468667c4f7094515450f46a55b54e13c
       print("🧩 STEP 4: Current Calculation");
       print("   -> Formula: I = (Vout - 2.5) / 0.100");
       print("   -> Substitution: ($vout - $offset) / 0.100");
 
-<<<<<<< HEAD
-      actualValue = (vout - offset) / 0.100;
-
-      print("   -> Result Current: ${actualValue.toStringAsFixed(4)} A");
-    }
-
-
-=======
       LogFile.write("🧩 STEP 4: Current Calculation");
       LogFile.write("   -> Formula: I = (Vout - 2.5) / 0.100");
       LogFile.write("   -> Substitution: ($vout - $offset) / 0.100");
@@ -895,7 +835,6 @@ Future<void> pickFromGallery() async {
         "   -> Result Current: ${actualValue.toStringAsFixed(4)} A",
       );
     }
->>>>>>> 6b1cd888468667c4f7094515450f46a55b54e13c
     // =====================================================
     // 🔌 RESISTANCE SENSOR
     // =====================================================
@@ -1030,8 +969,8 @@ Future<void> pickFromGallery() async {
     // =====================================================
     // 🖥 UI UPDATE
     // =====================================================
-    s['val'] = actualValue.toStringAsFixed(2);
-
+     s['val'] = actualValue.toStringAsFixed(3);
+     
     print("🧩 STEP 5: UI Value = ${s['val']}");
     LogFile.write("🧩 STEP 5: UI Value = ${s['val']}");
 
@@ -2206,7 +2145,8 @@ Future<void> pickFromGallery() async {
       sensor['status'] = sensorPassed ? "OK" : "NOT OK";
       sensorResults.refresh();
       print("🏁 [SENSOR DONE] ${sensor['part']} -> ${sensor['status']}");
-      LogFile.write("🏁 [SENSOR DONE] ${sensor['part']} -> ${sensor['status']}");
+      LogFile.write(
+          "🏁 [SENSOR DONE] ${sensor['part']} -> ${sensor['status']}");
     }
 
     isTesting.value = false;
@@ -2297,7 +2237,6 @@ Future<void> pickFromGallery() async {
       LogFile.write("📥 STATUS : ${response.statusCode}");
       LogFile.write("📥 RESPONSE : ${response.body}");
       LogFile.write("📥 =============================");
-
 
       // ==========================================================
       // RESPONSE PARSE
@@ -2436,7 +2375,7 @@ Future<void> pickFromGallery() async {
         print(
           "\n🚀 [SENSOR START] ${sensor['part']}",
         );
-         LogFile.write(
+        LogFile.write(
           "\n🚀 [SENSOR START] ${sensor['part']}",
         );
 
@@ -2472,7 +2411,6 @@ Future<void> pickFromGallery() async {
             "Reg: $currentStepReg | "
             "Value: $value",
           );
-
 
           sensor['status'] = "TESTING...";
 
