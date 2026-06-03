@@ -27,7 +27,9 @@ class AppPreferences {
   /// This leaves the actual recipe data on the device for next time
   static Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
+    clearToken();
     await prefs.remove(_currentUserIdKey);
+    print("🗑️ Token and User ID cleared");
   }
 
   static Future<void> setRefreshToken(String token) async {

@@ -537,7 +537,7 @@ class CustomDrawer extends StatelessWidget {
                                 fontSize: 13, fontWeight: FontWeight.w600)),
                         const SizedBox(height: 4),
                         Text(
-                            "Version ${controller.version.value} (${controller.buildNumber.value})",
+                            "Version D ${controller.version.value} (${controller.buildNumber.value})",
                             style: const TextStyle(
                                 color: Colors.grey,
                                 fontSize: 12,
@@ -591,9 +591,10 @@ class CustomDrawer extends StatelessWidget {
       // ✅ ONLY remove the active session ID
       // Do NOT use clearAll()
       await AppPreferences.logout();
+        print("🔐 User logged out. Navigating to Login Screen. ");
 
       Get.offAllNamed(route);
-    } else {
+    } else {  
       Get.toNamed(route);
     }
   }

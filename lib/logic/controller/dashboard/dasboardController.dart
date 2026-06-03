@@ -290,12 +290,14 @@ class DashboardController extends GetxController {
   // STATIC MODELS
   // =====================================================
 
-  final List<String> modelNos = [
-    "MOD-2024",
-    "TD 2.2 L3",
-    "V-B8_DIESEL",
-    "ENGINE-X1",
-    "ENGINE-Y2",
+  List<Map<String, String>> allModels = [
+    {"model": "MOD-2024", "kup": "12345678"},
+    {"model": "TD 2.2 L3", "kup": "25790211"},
+    {"model": "TD 2.2 L3", "kup": "25790212"}, // same model, different KUP
+    {"model": "TCD 2.2 L3", "kup": "25790213"},
+    {"model": "D 2.2 L3", "kup": "25790215"},
+    {"model": "TD 2.9 L4", "kup": "25790210"},
+    {"model": "TCD 2.9 L4", "kup": "25790223"},
   ];
 
   // =====================================================
@@ -337,59 +339,13 @@ class DashboardController extends GetxController {
     selectedModelIndex.value = index;
 
     if (index < engineModels.length) {
-      selectedModel.value = Map<String, dynamic>.from(
-        engineModels[index],
-      );
+      selectedModel.assignAll(engineModels[index]); // ✅ assignAll not .value =
     }
   }
 
   // =====================================================
   // DEMO DATA
   // =====================================================
-
-  void loadDemoData() {
-    engineModels.assignAll([
-      {
-        "name": "MOD-2024",
-        "total": 10,
-        "today": 3,
-        "pass": 7,
-        "fail": 3,
-      },
-      {
-        "name": "TD 2.2 L3",
-        "total": 20,
-        "today": 5,
-        "pass": 15,
-        "fail": 5,
-      },
-      {
-        "name": "V-B8_DIESEL",
-        "total": 30,
-        "today": 8,
-        "pass": 22,
-        "fail": 8,
-      },
-      {
-        "name": "ENGINE-X1",
-        "total": 15,
-        "today": 4,
-        "pass": 12,
-        "fail": 3,
-      },
-      {
-        "name": "ENGINE-Y2",
-        "total": 25,
-        "today": 6,
-        "pass": 18,
-        "fail": 7,
-      },
-    ]);
-
-    selectedModelIndex.value = 0;
-
-    selectedModel.value = engineModels.first;
-  }
 
   // =====================================================
   // FETCH DASHBOARD DATA
@@ -398,60 +354,57 @@ class DashboardController extends GetxController {
   Future<void> fetchDashboardData() async {
     try {
       isLoading.value = true;
-
+ 
       // =================================================
       // TOKEN
       // =================================================
-
+ 
       final token = await AppPreferences.getToken();
       print("...............................$token");
+ 
       // =================================================
       // URL
       // =================================================
-
-      final url = "http://139.59.76.174:8080/api/v1/support/traceability/test";
-
+ 
+      const url = "http://139.59.76.174:8080/api/v1/support/traceability/test";
+ 
       // =================================================
       // DATE
       // =================================================
-
+ 
       final now = DateTime.now();
-
-      final fromDate = now.subtract(
-        const Duration(days: 30),
-      );
-
+      final fromDate = now.subtract(const Duration(days: 30));
+ 
+      String formatDate(DateTime d) =>
+          "${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}";
+ 
+      // =================================================
+      // UNIQUE MODEL NAMES FOR API (no KUP, no duplicates)
+      // =================================================
+ 
+      final List<String> apiModelNames =
+          allModels.map((e) => e["model"]!).toSet().toList();
+ 
       // =================================================
       // REQUEST BODY
       // =================================================
-
+ 
       final requestBody = {
         "type": "SENSOR_TEST",
         "stationId": "SENSOR_1",
-        "fromDate":
-            "${fromDate.year}-${fromDate.month.toString().padLeft(2, '0')}-${fromDate.day.toString().padLeft(2, '0')}",
-        "toDate":
-            "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}",
-        "modelNo": [
-          "MOD-2024",
-          "TD 2.2 L3",
-        ]
+        "fromDate": formatDate(fromDate),
+        "toDate": formatDate(now),
+        "modelNo": apiModelNames, // ✅ only model names, no duplicates
       };
-
+ 
       print("🌐 URL => $url");
-
-      print(
-        "📤 BODY => ${jsonEncode(requestBody)}",
-      );
-
-      LogFile.write(
-        "📤 BODY => ${jsonEncode(requestBody)}",
-      );
-
+      print("📤 BODY => ${jsonEncode(requestBody)}");
+      LogFile.write("📤 BODY => ${jsonEncode(requestBody)}");
+ 
       // =================================================
       // API CALL
       // =================================================
-
+ 
       final response = await http
           .post(
             Uri.parse(url),
@@ -460,50 +413,31 @@ class DashboardController extends GetxController {
               "Accept": "application/json",
               "Authorization": "JWT $token",
             },
-            body: jsonEncode(
-              requestBody,
-            ),
+            body: jsonEncode(requestBody),
           )
-          .timeout(
-            const Duration(seconds: 20),
-          );
-
+          .timeout(const Duration(seconds: 20));
+ 
       // =================================================
-      // RESPONSE
+      // RESPONSE LOG
       // =================================================
-
-      print(
-        "📡 STATUS => ${response.statusCode}",
-      );
-
-      print(
-        "📡 RESPONSE => ${response.body}",
-      );
-
-      LogFile.write(
-        "📡 STATUS => ${response.statusCode}",
-      );
-
-      LogFile.write(
-        "📡 RESPONSE => ${response.body}",
-      );
-
+ 
+      print("📡 STATUS => ${response.statusCode}");
+      print("📡 RESPONSE => ${response.body}");
+      LogFile.write("📡 STATUS => ${response.statusCode}");
+      LogFile.write("📡 RESPONSE => ${response.body}");
+ 
       // =================================================
       // DEV LOGGER
       // =================================================
-
+ 
       Map<String, dynamic> parsedResponse = {};
-
       try {
         parsedResponse = jsonDecode(response.body);
       } catch (_) {
-        parsedResponse = {
-          "raw": response.body,
-        };
+        parsedResponse = {"raw": response.body};
       }
-
       parsedResponse['statusCode'] = response.statusCode;
-
+ 
       DevService.instance.insertAPICall(
         AppAPIsCall(
           id: "${DateTime.now().millisecondsSinceEpoch} ${DateTime.now().toIso8601String()}",
@@ -514,56 +448,70 @@ class DashboardController extends GetxController {
           response: parsedResponse,
         ),
       );
-
+ 
       // =================================================
       // SUCCESS
       // =================================================
-
+ 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-
+ 
         if (data["responseStatus"] == "SUCCESS") {
-          engineModels.clear();
-
           final list = data["data"] ?? [];
-
+ 
+          // ✅ Convert API response into a map keyed by modelId
+          final Map<String, dynamic> apiDataMap = {};
           for (var item in list) {
+            apiDataMap[item["modelId"]] = item;
+          }
+ 
+          engineModels.clear();
+ 
+          // ✅ Loop allModels — each entry = one card (model + kup)
+          // Same model with different KUP = two separate cards, same data
+          for (var entry in allModels) {
+            final modelName = entry["model"]!;
+            final kupNumber = entry["kup"]!;
+            final item = apiDataMap[modelName];
+ 
             engineModels.add({
-              "name": item["modelId"] ?? "-",
-              "total": item["totalTested"] ?? 0,
-              "today": item["todayTested"] ?? 0,
-              "pass": item["totalTestPass"] ?? 0,
-              "fail": item["totalTestFail"] ?? 0,
+              "name": modelName,
+              "kup": kupNumber,
+              "total": item?["totalTested"] ?? 0,
+              "today": item?["todayTested"] ?? 0,
+              "pass": item?["totalTestPass"] ?? 0,
+              "fail": item?["totalTestFail"] ?? 0,
             });
           }
-
+ 
           if (engineModels.isNotEmpty) {
             selectedModelIndex.value = 0;
-
-            selectedModel.value = engineModels.first;
+            selectedModel.assignAll(engineModels.first);
           }
-
+ 
           Get.snackbar(
             "Success",
             data["messages"]?[0]?["message"] ?? "Dashboard Loaded",
           );
+ 
+          // =================================================
+          // API RETURNED FAILURE STATUS
+          // =================================================
         } else {
-          loadDemoData();
-
+          // _loadEmptyModels();
+ 
           Get.snackbar(
             "Failed",
             data["messages"]?[0]?["message"] ?? "API Failed",
           );
         }
-      }
-
-      // =================================================
-      // SERVER ERROR
-      // =================================================
-
-      else {
-        loadDemoData();
-
+ 
+        // =================================================
+        // SERVER ERROR
+        // =================================================
+      } else {
+        //_loadEmptyModels();
+ 
         Get.snackbar(
           "Server Error",
           "Status : ${response.statusCode}",
@@ -571,17 +519,13 @@ class DashboardController extends GetxController {
       }
     } catch (e) {
       print("❌ ERROR => $e");
-
-      LogFile.write(
-        "❌ ERROR => $e",
-      );
-
-      // FALLBACK DATA
-      loadDemoData();
-
+      LogFile.write("❌ ERROR => $e");
+ 
+      //  _loadEmptyModels();
+ 
       Get.snackbar(
         "Error",
-        "Showing demo data",
+        "Something went wrong",
       );
     } finally {
       isLoading.value = false;
