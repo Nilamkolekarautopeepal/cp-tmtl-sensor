@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:cp_tmtl_sensor_zig/AppPreferences/app_areferences.dart';
@@ -15,7 +14,6 @@ import 'package:cp_tmtl_sensor_zig/routes/routes_string.dart';
 import 'package:cp_tmtl_sensor_zig/services/log_file.dart';
 import 'package:cp_tmtl_sensor_zig/themes/app_textstyles.dart';
 import 'package:file_picker/file_picker.dart';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:camera/camera.dart';
@@ -62,52 +60,6 @@ class ESNController extends GetxController {
 // add this line to existing onInit
   }
 
-  // loadSensorsFromRecipe() {
-  //   final testCtrl = Get.find<TestRecipeController>();
-
-  //   print("🔍 [LOAD] Requested model: ${modelNumber.value}");
-  //   print("📦 [AVAILABLE RECIPES]: ${testCtrl.recipeList.length}");
-
-  //   final recipe = testCtrl.recipeList.firstWhereOrNull(
-  //     (r) => r.model == modelNumber.value,
-  //   );
-
-  //   if (recipe == null) {
-  //     print("❌ [LOAD FAILED] No recipe found for model: ${modelNumber.value}");
-  //     Get.snackbar("Error", "No matching recipe found for model");
-  //     return;
-  //   }
-
-  //   selectedRecipe.value = recipe;
-
-  //   print("✅ [RECIPE FOUND]");
-  //   print("➡️ Model: ${recipe.model}");
-  //   print("➡️ Sensor count: ${recipe.sensors.length}");
-
-  //   sensorResults.assignAll(
-  //     recipe.sensors.map((s) {
-  //       final map = {
-  //         "reg": s.registerNumber,
-  //         "part": s.sensorName,
-  //         "type": s.sensorType,
-  //         //"reg": s.registerNumber,
-  //         "m": s.multiplier,
-  //         "c": s.offset,
-  //         "min": s.min,
-  //         "max": s.max,
-  //         "unit": s.unit,
-  //         "val": "-",
-  //         "status": "PENDING"
-  //       };
-
-  //       print("📡 [SENSOR LOADED] $map"); // 👈 important debug per sensor
-  //       return map;
-  //     }).toList(),
-  //   );
-
-  //   print("🎯 [FINAL] Total sensors mapped: ${sensorResults.length}");
-  //   print("🚀 Sensors successfully loaded for model: ${recipe.model}");
-  // }
   loadSensorsFromRecipe() {
     final testCtrl = Get.find<TestRecipeController>();
 
@@ -265,6 +217,9 @@ class ESNController extends GetxController {
           print("✅ ESN : ${serialNumber.value}");
           print("✅ Model : ${modelNumber.value}");
           print("✅ Variant : ${variantCode.value}");
+          LogFile.write("✅ ESN : ${serialNumber.value}");
+          LogFile.write("✅ Model : ${modelNumber.value}");
+          LogFile.write("✅ Variant : ${variantCode.value}");
           await loadSensorsFromRecipe();
           isValidated.value = true;
 
@@ -573,6 +528,7 @@ class ESNController extends GetxController {
 
   void _handleAutoClose() {
     print("DEBUG: _handleAutoClose called.");
+    LogFile.write("DEBUG: _handleAutoClose called.");
     isScanning.value = false;
     _isProcessing = false;
 
@@ -585,6 +541,7 @@ class ESNController extends GetxController {
     if (isOpen) {
       Get.back();
       print("DEBUG: Get.back() executed.");
+      LogFile.write("DEBUG: Get.back() executed.");
     }
 
     if (cameraController != null) {
@@ -1135,53 +1092,6 @@ class ESNController extends GetxController {
 
     plcCtrl.sendPacket(packet);
   }
-//>>>>>
-  // Future<void> runEgrTestSequence() async {
-  //   final plcCtrl = Get.find<PLCController>();
-
-  //   if (!plcCtrl.isConnected.value) {
-  //     _showErrorPopup();
-  //     return;
-  //   }
-
-  //   const int readRegister = 36; // EGR current register
-  //   const int writeRegister = 317; // EGR control register
-
-  //   print("🚀 [TEST START] EGR Sequence initiated");
-
-  //   // STEP 1: Initial Read
-  //   print("📥 STEP 1: Reading initial EGR value");
-  //   sendGeneratorDataRequest(readRegister);
-
-  //   await _waitForResponse(readRegister);
-
-  //   // STEP 2: Activate EGR
-  //   print("✍️ STEP 2: Activating EGR");
-  //   writeGeneratorDataRequest(writeRegister, 1);
-
-  //   await Future.delayed(const Duration(seconds: 1));
-
-  //   // STEP 3: Read after activation
-  //   print("📥 STEP 3: Reading after activation");
-  //   sendGeneratorDataRequest(readRegister);
-
-  //   await _waitForResponse(readRegister);
-
-  //   // STEP 4: Deactivate EGR
-  //   print("🔄 STEP 4: Deactivating EGR");
-  //   writeGeneratorDataRequest(writeRegister, 0);
-
-  //   await Future.delayed(const Duration(seconds: 1));
-
-  //   // STEP 5: Final Read
-  //   print("📥 STEP 5: Final read after reset");
-  //   sendGeneratorDataRequest(readRegister);
-
-  //   await _waitForResponse(readRegister);
-
-  //   print("✅ [TEST COMPLETE] EGR sequence finished");
-  // }
-  //>>>>>
 
   //new code
   Future<void> runEgrTestSequence() async {
@@ -1278,130 +1188,6 @@ class ESNController extends GetxController {
     LogFile.write("✅ [TEST COMPLETE] EGR sequence finished");
   }
 
-//   Future<void> sendResultsToServer() async {
-//   if (sensorResults.isEmpty) {
-//     print("⚠️ [SAVE] Aborted: sensorResults list is empty.");
-//     Get.snackbar("No Data", "No test results to save",
-//         backgroundColor: Colors.orange);
-//     return;
-//   }
-
-//   if (modelValidationId.value.isEmpty) {
-//     print("⚠️ [SAVE] Aborted: modelValidationId is empty.");
-//     Get.snackbar("Error", "Validation ID missing. Re-validate ESN.",
-//         backgroundColor: Colors.redAccent);
-//     return;
-//   }
-
-//   try {
-//     isLoading.value = true;
-//     print("🚀 [SAVE START] Preparing payload for ID: ${modelValidationId.value}");
-
-//     // 1. Map data
-//     List<Map<String, dynamic>> payload = sensorResults.map((s) => {
-//           "register": int.tryParse(s['reg'].toString()) ?? 0,
-//           "component": s['part'].toString(),
-//           "min": double.tryParse(s['min'].toString()) ?? 0.0,
-//           "max": double.tryParse(s['max'].toString()) ?? 0.0,
-//           "value": double.tryParse(s['val'].toString()) ?? 0.0,
-//           "result": s['status'].toString(),
-//         }).toList();
-
-//     // Verification Print: See exactly what JSON is going out
-//     String jsonPayload = jsonEncode(payload);
-//     print("📦 [PAYLOAD]: $jsonPayload");
-
-//     // 2. Setup URL and Token
-//     final String url = "http://139.59.76.174:8080/api/v1/support/create/${modelValidationId.value}/model-validation-session/";
-//     String? token = await AppPreferences.getToken();
-
-//     print("🌐 [URL]: $url");
-//     print("🔑 [AUTH]: JWT ${token?.substring(0, 10)}..."); // Printing only start of token for security
-
-//     // 3. Make Request
-//     final response = await http.post(
-//       Uri.parse(url),
-//       headers: {
-//         "Content-Type": "application/json",
-//         "Authorization": "JWT $token",
-//       },
-//       body: jsonPayload,
-//     );
-
-//     // 4. Response Logs
-//     print("📡 [RESPONSE STATUS]: ${response.statusCode}");
-//     print("📡 [RESPONSE BODY]: ${response.body}");
-
-//     if (response.statusCode == 201 || response.statusCode == 200) {
-//       print("✅ [SAVE SUCCESS] Data accepted by server.");
-//       Get.snackbar("Success", "Test results saved successfully",
-//           backgroundColor: Colors.green, colorText: Colors.white);
-//     } else {
-//       print("❌ [SAVE FAILED] Server returned an error.");
-//       Get.snackbar("Error", "Failed to save data. (${response.statusCode})",
-//           backgroundColor: Colors.redAccent, colorText: Colors.white);
-//     }
-//   } catch (e) {
-//     print("🔥 [EXCEPTION] Error in sendResultsToServer: $e");
-//     Get.snackbar("Error", "An unexpected error occurred");
-//   } finally {
-//     isLoading.value = false;
-//     print("🏁 [SAVE END] isLoading set to false.");
-//   }
-// }
-
-  // Future<void> sendResultsToServer() async {
-  //   if (sensorResults.isEmpty) return;
-
-  //   // 1. Prepare payload exactly like before
-  //   List<Map<String, dynamic>> payload = sensorResults
-  //       .map((s) => {
-  //             "register": int.tryParse(s['reg'].toString()) ?? 0,
-  //             "component": s['part'].toString(),
-  //             "min": double.tryParse(s['min'].toString()) ?? 0.0,
-  //             "max": double.tryParse(s['max'].toString()) ?? 0.0,
-  //             "value": double.tryParse(s['val'].toString()) ?? 0.0,
-  //             "result": s['status'].toString(),
-  //           })
-  //       .toList();
-
-  //   final String url =
-  //       "http://139.59.76.174:8080/api/v1/support/create/${modelValidationId.value}/model-validation-session/";
-
-  //   try {
-  //     isLoading.value = true;
-  //     String? token = await AppPreferences.getToken();
-
-  //     final response = await http
-  //         .post(
-  //           Uri.parse(url),
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //             "Authorization": "JWT $token"
-  //           },
-  //           body: jsonEncode(payload),
-  //         )
-  //         .timeout(const Duration(seconds: 10));
-
-  //     if (response.statusCode == 201 || response.statusCode == 200) {
-  //       Get.snackbar("Success", "Data synced to server",
-  //           backgroundColor: Colors.green);
-  //     } else {
-  //       throw HttpException("Server Error: ${response.statusCode}");
-  //     }
-  //   } catch (e) {
-  //     // 🔴 OFFLINE DETECTED or SERVER DOWN
-  //     print("📡 [OFFLINE] Saving to sync queue: $e");
-  //     await _saveToSyncQueue(url, payload);
-
-  //     Get.snackbar(
-  //         "Offline Mode", "Results saved locally. Will sync when online.",
-  //         backgroundColor: Colors.orange, duration: const Duration(seconds: 5));
-  //   } finally {
-  //     isLoading.value = false;
-  //   }
-  // }
-
 // Save a failed request to a local file
   Future<void> saveToSyncQueue(
       String url, List<Map<String, dynamic>> payload) async {
@@ -1413,7 +1199,6 @@ class ESNController extends GetxController {
       if (await file.exists()) {
         queue = jsonDecode(await file.readAsString());
       }
-
       // Add this request to the list
       queue.add({
         "url": url,
@@ -1753,109 +1538,6 @@ class ESNController extends GetxController {
     }
   }
 
-  // Future<bool> _readWithTimeout(int regAddr) async {
-  //   final plcCtrl = Get.find<PLCController>();
-
-  //   sendGeneratorDataRequest(regAddr);
-
-  //   int timeout = 0;
-
-  //   while (timeout < 30) {
-  //     await Future.delayed(const Duration(milliseconds: 100));
-
-  //     if (!plcCtrl.isConnected.value) {
-  //       return false;
-  //     }
-
-  //     int index = sensorResults.indexWhere((s) => s['reg'] == regAddr);
-
-  //     if (index != -1 && sensorResults[index]['val'] != "-") {
-  //       return true;
-  //     }
-
-  //     timeout++;
-  //   }
-
-  //   return false;
-  // }
-
-  // Future<bool> _readWithTimeout(int regAddr) async {
-  //   final plcCtrl = Get.find<PLCController>();
-
-  //   print(
-  //       "📤 [READ REQUEST] Reg: $regAddr | PLC Connected: ${plcCtrl.isConnected.value}");
-
-  //   // ✅ Guard: don't even try if PLC offline
-  //   if (!plcCtrl.isConnected.value) {
-  //     print("❌ [READ SKIP] PLC not connected for reg: $regAddr");
-  //     return false;
-  //   }
-
-  //   sendGeneratorDataRequest(regAddr);
-
-  //   int timeout = 0;
-
-  //   while (timeout < 50) {
-  //     // ✅ Increased from 30 to 50 (5 seconds total)
-  //     await Future.delayed(const Duration(milliseconds: 100));
-
-  //     int index = sensorResults.indexWhere((s) => s['reg'] == regAddr);
-
-  //     if (index != -1 && sensorResults[index]['val'] != "-") {
-  //       print(
-  //           "✅ [READ OK] Reg: $regAddr | Val: ${sensorResults[index]['val']} | Attempts: $timeout");
-  //       return true;
-  //     }
-
-  //     timeout++;
-  //     if (timeout % 10 == 0) {
-  //       print("⏳ [WAITING] Reg: $regAddr | Attempt: $timeout/50");
-  //     }
-  //   }
-
-  //   print("⌛ [TIMEOUT] No response for reg: $regAddr after ${timeout * 100}ms");
-  //   return false;
-  // }
-
-  //>>>>>>>
-
-  // Future<bool> _readWithTimeout(int regAddr) async {
-  //   final plcCtrl = Get.find<PLCController>();
-
-  //   print(
-  //       "📤 [READ REQUEST] Reg: $regAddr | PLC Connected: ${plcCtrl.isConnected.value}");
-
-  //   if (!plcCtrl.isConnected.value) {
-  //     print("❌ [READ SKIP] PLC not connected");
-  //     return false;
-  //   }
-
-  //   sendGeneratorDataRequest(regAddr);
-
-  //   int timeout = 0;
-  //   while (timeout < 50) {
-  //     // 5 seconds total
-  //     await Future.delayed(const Duration(milliseconds: 100));
-
-  //     // We look for the sensor that is currently assigned this register
-  //     int index = sensorResults.indexWhere((s) => s['reg'] == regAddr);
-
-  //     if (index != -1 && sensorResults[index]['val'] != "-") {
-  //       print(
-  //           "✅ [READ OK] Reg: $regAddr | Val: ${sensorResults[index]['val']}");
-  //       return true;
-  //     }
-
-  //     timeout++;
-  //     if (timeout % 10 == 0) {
-  //       print("⏳ [WAITING] Reg: $regAddr | Attempt: $timeout/50");
-  //     }
-  //   }
-
-  //   print("⌛ [TIMEOUT] No response for reg: $regAddr");
-  //   return false;
-  // }
-
   // READ 10 TIMES
 
   Future<double?> _readWithTimeout(int regAddr) async {
@@ -2011,7 +1693,6 @@ class ESNController extends GetxController {
     print("");
     LogFile.write("");
     LogFile.write("===================================================");
-
     LogFile.write(
       "📊 [AVG RESULT] Register: $regAddr",
     );
@@ -2033,78 +1714,7 @@ class ESNController extends GetxController {
 
     return avg;
   }
-  // Future<void> startTestingSequence() async {
-  //   final plcCtrl = Get.find<PLCController>();
-
-  //   if (!plcCtrl.isConnected.value) {
-  //     _showPopup("Hardware Offline", "Connect PLC first", true);
-  //     return;
-  //   }
-
-  //   if (isTesting.value) return;
-  //   isTesting.value = true;
-
-  //   for (var sensor in sensorResults) {
-  //     List operations = sensor['operations'] ?? [];
-
-  //     print("\n🚀 [SENSOR START] ${sensor['part']}");
-
-  //     for (int i = 0; i < operations.length; i++) {
-  //       var op = operations[i];
-
-  //       String operation = op.operation; // READ / WRITE
-  //       int reg = int.tryParse(op.registerAddress) ?? sensor['reg'];
-  //       int value = int.tryParse(op.value) ?? 0;
-
-  //       print("▶️ Step ${i + 1}: $operation | Reg: $reg | Val: $value");
-
-  //       // UI update
-  //       sensor['status'] = "TESTING...";
-  //       sensorResults.refresh();
-
-  //       // =========================
-  //       // 🔵 READ
-  //       // =========================
-  //       if (operation == "READ") {
-  //         bool received = await _readWithTimeout(reg);
-
-  //         if (!received) {
-  //           sensor['status'] = "TIMEOUT";
-  //           sensorResults.refresh();
-
-  //           _handleAbort("Timeout at ${sensor['part']}");
-  //           return;
-  //         }
-  //       }
-
-  //       // =========================
-  //       // 🟠 WRITE
-  //       // =========================
-  //       else if (operation == "WRITE") {
-  //         writeGeneratorDataRequest(reg, value);
-
-  //         await Future.delayed(const Duration(milliseconds: 500));
-  //       }
-
-  //       await Future.delayed(const Duration(milliseconds: 300));
-  //     }
-
-  //     // ✅ After all operations for this specific sensor are done
-  //     sensor['status'] = "OK";
-  //     sensorResults.refresh();
-  //   }
-
-  //   // ✅ SEQUENCE COMPLETE
-  //   isTesting.value = false;
-
-  //   // --- AUTOMATIC API CALL ---
-  //   print("📡 [AUTO-SAVE] Sequence complete. Sending data to server...");
-  //   await sendResultsToServer();
-
-  //   _showPopup(
-  //       "Complete", "Sequence executed and data saved successfully", false);
-  // }
-
+  
   Future<void> startTestingSequence() async {
     final plcCtrl = Get.find<PLCController>();
 
@@ -2628,70 +2238,4 @@ class ESNController extends GetxController {
       isTesting.value = false;
     }
   }
-
-  // Future<void> startTestingSequence() async {
-  //   final plcCtrl = Get.find<PLCController>();
-
-  //   if (!plcCtrl.isConnected.value) {
-  //     _showPopup("Hardware Offline", "Connect PLC first", true);
-  //     return;
-  //   }
-
-  //   if (isTesting.value) return;
-  //   isTesting.value = true;
-
-  //   for (var sensor in sensorResults) {
-  //     List operations = sensor['operations'] ?? [];
-
-  //     print("\n🚀 [SENSOR START] ${sensor['part']}");
-
-  //     for (int i = 0; i < operations.length; i++) {
-  //       var op = operations[i];
-
-  //       String operation = op.operation; // READ / WRITE
-  //       int reg = int.tryParse(op.registerAddress) ?? sensor['reg'];
-  //       int value = int.tryParse(op.value) ?? 0;
-
-  //       print("▶️ Step ${i + 1}: $operation | Reg: $reg | Val: $value");
-
-  //       // UI update
-  //       sensor['status'] = "TESTING...";
-  //       sensorResults.refresh();
-
-  //       // =========================
-  //       // 🔵 READ
-  //       // =========================
-  //       if (operation == "READ") {
-  //         bool received = await _readWithTimeout(reg);
-
-  //         if (!received) {
-  //           sensor['status'] = "TIMEOUT";
-  //           sensorResults.refresh();
-
-  //           _handleAbort("Timeout at ${sensor['part']}");
-  //           return;
-  //         }
-  //       }
-
-  //       // =========================
-  //       // 🟠 WRITE
-  //       // =========================
-  //       else if (operation == "WRITE") {
-  //         writeGeneratorDataRequest(reg, value);
-
-  //         await Future.delayed(const Duration(milliseconds: 500));
-  //       }
-
-  //       await Future.delayed(const Duration(milliseconds: 300));
-  //     }
-
-  //     // ✅ After all operations
-  //     sensor['status'] = "OK";
-  //     sensorResults.refresh();
-  //   }
-
-  //   isTesting.value = false;
-
-  //   _showPopup("Complete", "Sequence executed successfully", false);
-  // }
 }

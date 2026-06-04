@@ -38,19 +38,6 @@ class SensorAnalysisController extends GetxController {
     unit.value.text = sensor['unit'];
   }
 
-  // void saveSensorToTable() {
-  //   addedSensors.add({
-  //     'name': sensorName.value.text,
-  //     'type': sensorType.value.text,
-  //     'register': registerNumber.value.text,
-  //     'min': double.tryParse(min.value.text) ?? 0.0,
-  //     'max': double.tryParse(max.value.text) ?? 100.0,
-  //     'unit': unit.value.text,
-  //     'samplingRate': 1.0,
-  //   });
-  //   _clearForm();
-  //   isAddingSensor.value = false;
-  // }
   void saveSensorToTable() {
   addedSensors.add({
     'name': sensorName.value.text,
@@ -89,101 +76,11 @@ class SensorAnalysisController extends GetxController {
 
     liveDataPoints.add(newValue);
 
-    // Creates the scrolling effect by removing old data
-    // if (liveDataPoints.length > maxDataPoints) {
-    //   liveDataPoints.removeAt(0);
-    // }
   }
 
   var liveMin = 0.0.obs;
   var liveMax = 0.0.obs;
 
-  // void startAnalysis(Map<String, dynamic> sensor) {
-  //   activeSensor.value = sensor;
-  //   isAnalyzing.value = true;
-  //   isStreaming.value = true;
-  //   isPaused.value = false;
-
-  //   // Reset data and stats
-  //   liveDataPoints.clear();
-  //   liveMin.value = double.infinity;
-  //   liveMax.value = -double.infinity;
-
-  //   // 1. 🔥 EXTRACT DYNAMIC SAMPLING RATE
-  //   // Pull from the sensor map (defaulting to 1.0 if null)
-  //   double rateInSeconds = sensor['samplingRate'] ?? 1.0;
-
-  //   // Convert seconds to milliseconds for the timer
-  //   int intervalMs = (rateInSeconds * 1000).toInt();
-
-  //   _timer?.cancel();
-
-  //   // 2. 🔥 START TIMER WITH DYNAMIC INTERVAL
-  //   _timer = Timer.periodic(Duration(milliseconds: intervalMs), (timer) {
-  //     if (isPaused.value) return;
-
-  //     double sMin = double.tryParse(activeSensor['min'].toString()) ?? 0.0;
-  //     double sMax = double.tryParse(activeSensor['max'].toString()) ?? 100.0;
-
-  //     // Generate mock data (Replace this with your real Modbus/OBD2 call)
-  //     double newValue = sMin + Random().nextDouble() * (sMax - sMin);
-
-  //     liveDataPoints.add(newValue);
-
-  //     // Update live peak statistics
-  //     if (newValue < liveMin.value) liveMin.value = newValue;
-  //     if (newValue > liveMax.value) liveMax.value = newValue;
-
-  //     // 3. AUTO-SCROLL LOGIC
-  //     WidgetsBinding.instance.addPostFrameCallback((_) {
-  //       if (chartScrollController.hasClients) {
-  //         chartScrollController.animateTo(
-  //           chartScrollController.position.maxScrollExtent,
-  //           duration: const Duration(milliseconds: 200),
-  //           curve: Curves.easeOut,
-  //         );
-  //       }
-  //     });
-  //   });
-  // }
-  // Inside SensorAnalysisController
-  // void sendGeneratorDataRequest(int registerAddress) {
-  //   // Expected: 1 argument
-  //   final plcCtrl = Get.find<PLCController>();
-
-  //   if (!plcCtrl.isConnected.value) {
-  //     isStreaming.value = false;
-  //     isAnalyzing.value = false;
-  //     Get.dialog(
-  //       CustomPopup(
-  //         title: "PLC Connection Lost",
-  //         message:
-  //             "Hardware communication was interrupted. Please check your Modbus TCP settings and cable.",
-  //         isError: true, // This will make the button red and add an icon
-  //       ),
-  //     );
-  //   }
-  //   // Your bit shifting logic
-  //   int hiAddr = (registerAddress >> 8) & 0xFF;
-  //   int loAddr = registerAddress & 0xFF;
-
-  //   List<int> packet = [
-  //     0x00,
-  //     0x01,
-  //     0x00,
-  //     0x00,
-  //     0x00,
-  //     0x06,
-  //     0x01,
-  //     0x03,
-  //     hiAddr,
-  //     loAddr,
-  //     0x00,
-  //     0x01
-  //   ];
-
-  //   plcCtrl.sendPacket(packet);
-  // }
  void sendGeneratorDataRequest(int registerAddress) {
   final plcCtrl = Get.find<PLCController>();
 

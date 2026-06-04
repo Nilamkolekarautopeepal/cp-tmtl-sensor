@@ -74,55 +74,7 @@ class SettingsScreen extends StatelessWidget {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          // ---------------- BUTTON ----------------
-                          // ElevatedButton(
-                          //   onPressed: plcController.isConnecting.value
-                          //       ? null
-                          //       : () async {
-                          //           if (_formKey.currentState!.validate()) {
-                          //             plcController.disconnect();
-
-                          //             await Future.delayed(
-                          //               const Duration(milliseconds: 500),
-                          //             );
-
-                          //             plcController.connectToPLC(
-                          //               plcController.ipController.text,
-                          //               plcController.portController.text,
-                          //             );
-                          //           }
-                          //         },
-                          //   style: ElevatedButton.styleFrom(
-                          //     backgroundColor: const Color(0xFF4A5A71),
-                          //     shape: RoundedRectangleBorder(
-                          //       borderRadius: BorderRadius.circular(6),
-                          //     ),
-                          //     padding: const EdgeInsets.symmetric(
-                          //       horizontal: 150,
-                          //       vertical: 20,
-                          //     ),
-                          //   ),
-                          //   child: plcController.isConnecting.value
-                          //       ? const SizedBox(
-                          //           height: 18,
-                          //           width: 18,
-                          //           child: CircularProgressIndicator(
-                          //             strokeWidth: 2,
-                          //             color: Colors.white,
-                          //           ),
-                          //         )
-                          //         :Text("okay")
-                          //       // : Text(
-                          //       //     plcController.isConnected.value
-                          //       //         ? 'RECONNECT DEVICE'
-                          //       //         : 'CONNECT TO PLC',
-                          //       //     style: const TextStyle(
-                          //       //       color: Colors.white,
-                          //       //       fontSize: 16,
-                          //       //     ),
-                          //       //   ),
-                          // ),
-                          // ---------------- BUTTON ----------------
+                        
                           ElevatedButton(
                             onPressed: plcController.isConnecting.value
                                 ? null
@@ -168,32 +120,6 @@ class SettingsScreen extends StatelessWidget {
                           const SizedBox(
                               height: 12), // 🔥 spacing between button & status
 
-                          // ---------------- STATUS ----------------
-                          // Row(
-                          //   mainAxisSize: MainAxisSize
-                          //       .min, // 🔥 IMPORTANT (centers row content)
-                          //   children: [
-                          //     Icon(
-                          //       plcController.isConnected.value
-                          //           ? Icons.check_circle
-                          //           : Icons.error_outline,
-                          //       color: plcController.isConnected.value
-                          //           ? Colors.green
-                          //           : Colors.red,
-                          //     ),
-                          //     const SizedBox(width: 8),
-                          //     Text(
-                          //       "Device Status: ${plcController.isConnected.value ? 'ONLINE' : 'OFFLINE'}",
-                          //       style: TextStyle(
-                          //         color: plcController.isConnected.value
-                          //             ? Colors.green
-                          //             : Colors.red,
-                          //         fontWeight: FontWeight.bold,
-                          //         fontSize: 14,
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
                         ],
                       ),
                     ),

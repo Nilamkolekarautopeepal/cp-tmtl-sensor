@@ -88,65 +88,6 @@ class TestRecipeScreen extends StatelessWidget {
                                     fontSize: tableHeaderSize, isHeader: true),
                               ],
                             ),
-
-                            // Data Rows
-                            // ...controller.recipeList.map((item) => TableRow(
-                            //       children: [
-                            //         _buildTableCell(item.sr ?? '',
-                            //             fontSize: tableCellSize),
-                            //         _buildTableCell(item.model ?? '',
-                            //             fontSize: tableCellSize),
-                            //         _buildTableCell(item.type ?? '',
-                            //             fontSize: tableCellSize),
-                            //         // _buildTableCell(
-                            //         //     (item.sensors.isNotEmpty)
-                            //         //         ? item.sensors[0].registerNumber
-                            //         //             .toString()
-                            //         //         : 'N/A',
-                            //         //     fontSize: tableCellSize),
-                            //         TableCell(
-                            //           child: Row(
-                            //             mainAxisAlignment:
-                            //                 MainAxisAlignment.center,
-                            //             children: [
-                            //               IconButton(
-                            //                 icon: Icon(
-                            //                     Icons
-                            //                         .visibility_outlined, // Eye icon for view
-                            //                     color: Colors.grey[700],
-                            //                     size: isDesktop ? 22 : 18),
-                            //                 onPressed: () => Get.toNamed(
-                            //                     Routes
-                            //                         .recipeAdditionReadOnlyScreen,
-                            //                     arguments: {
-                            //                       'item': item
-                            //                     }), // Pass a flag
-                            //               ),
-                            //               IconButton(
-                            //                 icon: Icon(Icons.edit,
-                            //                     color: Colors.blue,
-                            //                     size: isDesktop ? 22 : 18),
-                            //                 onPressed: () => Get.toNamed(
-                            //                     Routes.recipeAdditionScreen,
-                            //                     arguments: item),
-                            //               ),
-                            //               IconButton(
-                            //                 icon: Icon(Icons.download,
-                            //                     color: Colors.green,
-                            //                     size: isDesktop ? 22 : 18),
-                            //                 onPressed: () => controller
-                            //                     .exportSingleRecipe(item),
-                            //               ),
-                            //               // IconButton(
-                            //               //   icon: Icon(Icons.delete, color: Colors.red, size: isDesktop ? 22 : 18),
-                            //               //   onPressed: () => controller.deleteSensor(item),
-                            //               // )
-                            //             ],
-                            //           ),
-                            //         ),
-                            //       ],
-                            //     )),
-                            // Data Rows with sequential Sr. Numbers
                             ...controller.recipeList
                                 .asMap()
                                 .entries

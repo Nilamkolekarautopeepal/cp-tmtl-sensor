@@ -13,7 +13,6 @@ class LoginScreen extends GetView<LoginController> {
 
     final Size screenSize = MediaQuery.of(context).size;
     final bool isDesktop = screenSize.width > 900;
-
     const Color primaryBlue = Color(0xFF0055BB);
     const Color textDark = Color(0xFF1E293B);
     const Color textLight = Color(0xFF64748B);
@@ -40,7 +39,7 @@ class LoginScreen extends GetView<LoginController> {
                   children: [
                     // LOGO ABOVE NAME
                     Image.asset(
-                     'assets/new/tmtl-logo(1).png',
+                      'assets/new/tmtl-logo(1).png',
                       height: 120,
                       // Note: Removing 'color: Colors.white' allows the actual logo colors to show.
                       // Add it back if you want a solid white silhouette.
@@ -173,63 +172,39 @@ class LoginScreen extends GetView<LoginController> {
 
                         // Sign In Button
                         // Sign In Button
-Obx(() => ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: primaryBlue,
-        foregroundColor: Colors.white,
-        minimumSize: const Size(double.infinity, 56),
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
-      // Disable button while loading to prevent multiple clicks
-      onPressed: controller.isLoading.value 
-          ? null 
-          : () => controller.login(),
-      child: controller.isLoading.value
-          ? const SizedBox(
-              height: 24,
-              width: 24,
-              child: CircularProgressIndicator(
-                color: Colors.white,
-                strokeWidth: 3,
-              ),
-            )
-          : const Text(
-              "SIGN IN",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w800,
-                letterSpacing: 1,
-              ),
-            ),
-    )),
-                        // ElevatedButton(
-                        //   style: ElevatedButton.styleFrom(
-                        //     backgroundColor: primaryBlue,
-                        //     foregroundColor: Colors.white,
-                        //     minimumSize: const Size(double.infinity, 56),
-                        //     elevation: 0,
-                        //     shape: RoundedRectangleBorder(
-                        //       borderRadius: BorderRadius.circular(12),
-                        //     ),
-                        //   ),
-                        //   onPressed: () {
-                        //     controller.login();
-                        //     // Use your actual route name here
-                        //     // Get.toNamed(Routes.dashboardScreen);
-                        //   },
-                        //   child: const Text(
-                        //     "SIGN IN",
-                        //     style: TextStyle(
-                        //       fontSize: 16,
-                        //       fontWeight: FontWeight.w800,
-                        //       letterSpacing: 1,
-                        //     ),
-                        //   ),
-                        // ),
-
+                        Obx(() => ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: primaryBlue,
+                                foregroundColor: Colors.white,
+                                minimumSize: const Size(double.infinity, 56),
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                              // Disable button while loading to prevent multiple clicks
+                              onPressed: controller.isLoading.value
+                                  ? null
+                                  : () => controller.login(),
+                              child: controller.isLoading.value
+                                  ? const SizedBox(
+                                      height: 24,
+                                      width: 24,
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                        strokeWidth: 3,
+                                      ),
+                                    )
+                                  : const Text(
+                                      "SIGN IN",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w800,
+                                        letterSpacing: 1,
+                                      ),
+                                    ),
+                            )),
+                        
                         const SizedBox(height: 40),
 
                         const Center(

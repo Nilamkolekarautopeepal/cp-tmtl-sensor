@@ -28,17 +28,6 @@ String getJsonFromMap(Map<String, dynamic> mapData) {
   return data;
 }
 
-// Map getMapFromJson(String mapData) {
-//   Map<String, dynamic> data = Map();
-//   try {
-//     if (mapData == null || mapData == "") return data;
-//     data = json.decode(mapData);
-//   } catch (e, s) {
-//     errorLogs("Error in getMapFromJson\n\n *$mapData* \n\n $e\n\n$s");
-//   }
-//   return data;
-// }
-
 Map getMapFromJson(String mapData) {
   Map<String, dynamic> data = Map();
   try {

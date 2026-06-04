@@ -1,45 +1,4 @@
-// import 'package:cp_tmtl_sensor_zig/models/receipe_model.dart';
-// import 'package:flutter/widgets.dart';
-// import 'package:get/get.dart';
 
-// class recipeAdditionReadOnlyController extends GetxController {
-//   final modelController = TextEditingController().obs;
-//   final typeController = TextEditingController().obs;
-//   final sensorName = TextEditingController().obs;
-//   final sensorType = TextEditingController().obs;
-//   final registerNumber = TextEditingController().obs;
-//   final multiplier = TextEditingController().obs;
-//   final offset = TextEditingController().obs;
-//   final min = TextEditingController().obs;
-//   final max = TextEditingController().obs;
-//   RxList<SensorConfig> addedSensors = <SensorConfig>[].obs;
-//   @override
-//   void onInit() {
-//     super.onInit();
-
-//     if (Get.arguments != null && Get.arguments is Recipe) {
-//       final recipe = Get.arguments as Recipe;
-//       modelController.value.text = recipe.model ?? "";
-//       typeController.value.text = recipe.type ?? "";
-
-//       // FIX: Explicitly map to <SensorConfig>
-//       if (recipe.sensors != null) {
-//         addedSensors.assignAll(recipe.sensors!
-//             .map<SensorConfig>((s) => SensorConfig(
-//                 sensorName: s.sensorName ?? "",
-//                 sensorType: s.sensorType ?? "",
-//                 registerNumber: s.registerNumber,
-//                 min: s.min,
-//                 max: s.max,
-//                 multiplier: s.multiplier,
-//                 // offset: s.offset,
-//                 unit: s.unit,
-//                 testResult: s.testResult))
-//             .toList());
-//       }
-//     }
-//   }
-// }
 import 'package:cp_tmtl_sensor_zig/models/receipe_model.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -75,9 +34,7 @@ void selectSensor(SensorConfig sensor) {
   offset.value.text = sensor.offset?.toString() ?? "0";
   min.value.text = sensor.min?.toString() ?? "0";
   max.value.text = sensor.max?.toString() ?? "0";
-  // If you added these fields:
-  // unit.value.text = sensor.unit ?? "";
-  // testResult.value.text = sensor.testResult ?? "";
+  
 }
 
   void _loadArguments() {

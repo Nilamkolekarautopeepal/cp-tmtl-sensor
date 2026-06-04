@@ -236,24 +236,6 @@ class AddRecipeController extends GetxController {
     // This ensures the Obx in your UI shows the correct input fields immediately
     sensorType.refresh();
   }
-
-  // ── Operation log (stored directly on SensorConfig) ──────────────────────────
-  // void logOperation({
-  //   required String sensorName,
-  //   required String operation, // "READ" or "WRITE"
-  //   required String value,
-  // }) {
-  //   final sensor =
-  //       addedSensors.firstWhereOrNull((s) => s.sensorName == sensorName);
-  //   if (sensor == null) return;
-
-  //   sensor.addLog(
-  //     operation: operation,
-  //     registerAddress: registerNumber.value.text,
-  //     value: value,
-  //   );
-  //   addedSensors.refresh(); // triggers Obx rebuild in view
-  // }
   void logOperation({
     required String sensorName,
     required String operation,
@@ -424,32 +406,6 @@ class AddRecipeController extends GetxController {
       Get.snackbar("Error", "Failed to save recipe locally");
     }
   }
-
-  // void deleteOperationLog(int logIndex) {
-  //   if (editingSensorIndex.value != -1) {
-  //     // 1. Get the current sensor
-  //     var currentSensor = addedSensors[editingSensorIndex.value];
-
-  //     // 2. Safety check for the index
-  //     if (logIndex >= 0 && logIndex < (currentSensor.operations.length)) {
-  //       // 3. Remove the item
-  //       currentSensor.operations.removeAt(logIndex);
-
-  //       // 4. Update the list with a COPY of the sensor to trigger Obx
-  //       // This forces the UI to re-render the specific row
-  //       addedSensors[editingSensorIndex.value] = currentSensor;
-  //       addedSensors.refresh();
-
-  //       print(
-  //           "🗑️ Operation log at index $logIndex deleted from ${currentSensor.sensorName}");
-  //     }
-  //   } else {
-  //     Get.snackbar("Notice", "Please select a sensor first",
-  //         snackPosition: SnackPosition.BOTTOM,
-  //         backgroundColor: Colors.amber.shade700,
-  //         colorText: Colors.white);
-  //   }
-  // }
 
   void _resetForm() {
     modelController.value.clear();

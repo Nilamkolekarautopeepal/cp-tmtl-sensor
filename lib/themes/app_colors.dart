@@ -28,7 +28,6 @@ class AppColors {
   static const Color Warning = Colors.yellow;
   static const Color linearGradientPrimary = Color(0xFF66BB6A);
   static const Color linearGradientSecondary = Color(0xFF1B5F20);
-
   static const Color headerImageBackground = Color(0xFFE1F2CB);
   static const Color headertext = Color(0xFF3C4852);
   static const Color headersubText = Color(0xFF7A8B94);
