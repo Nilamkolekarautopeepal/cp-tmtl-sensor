@@ -174,21 +174,35 @@ class ESNController extends GetxController {
 
   Future<void> validateESN() async {
     String esn = esnTextFieldController.text.trim();
+
     if (esn.isEmpty) {
-      Get.snackbar("Error", "Please enter an ESN",
-          backgroundColor: Colors.redAccent, colorText: Colors.white);
+      Get.snackbar(
+        "Error",
+        "Please enter an ESN",
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+      );
       return;
     }
 
-    final String formattedEsn = "SN-$esn";
-    final requestBody = {"engine_serial_no": formattedEsn};
+    final requestBody = {
+      "type": "SENSOR_TEST",
+      "stationID": "SENSOR_1",
+      "requestParameters": {
+        "engineSerialNumber": esn,
+      }
+    };
 
     try {
       isLoading.value = true;
-      print("📡 [ESN VALIDATION] Sending: $formattedEsn");
-      LogFile.write("📡 [ESN VALIDATION] Sending: $formattedEsn");
+
+      print("📡 [ESN VALIDATION] Sending: ${jsonEncode(requestBody)}");
+      LogFile.write(
+        "📡 [ESN VALIDATION] Sending: ${jsonEncode(requestBody)}",
+      );
 
       String? savedToken = await AppPreferences.getToken();
+
       final String validateUrl =
           "${AppEnvironment.baseUrl}${AppURLs.engineNumberCheck}";
 
@@ -208,60 +222,77 @@ class ESNController extends GetxController {
       print("📡 [RESPONSE] Body: ${response.body}");
       LogFile.write("📡 [RESPONSE] Body: ${response.body}");
 
-      // ✅ Log to DevScreen
       Map<String, dynamic> parsedResponse = {};
+
       try {
         parsedResponse = jsonDecode(response.body);
       } catch (_) {
         parsedResponse = {"raw": response.body};
       }
+
       parsedResponse['statusCode'] = response.statusCode;
 
-      DevService.instance.insertAPICall(AppAPIsCall(
-        id: "${DateTime.now().millisecondsSinceEpoch} ${DateTime.now().toIso8601String()}",
-        type: 'POST ${response.statusCode}',
-        path: AppURLs.engineNumberCheck,
-        dateTime: DateTime.now(),
-        data: requestBody,
-        response: parsedResponse,
-      ));
+      DevService.instance.insertAPICall(
+        AppAPIsCall(
+          id: "${DateTime.now().millisecondsSinceEpoch} ${DateTime.now().toIso8601String()}",
+          type: 'POST ${response.statusCode}',
+          path: AppURLs.engineNumberCheck,
+          dateTime: DateTime.now(),
+          data: requestBody,
+          response: parsedResponse,
+        ),
+      );
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = jsonDecode(response.body);
 
-        if (responseData['success'] == true && responseData['data'] != null) {
-          final data = responseData['data'];
+        if (responseData["responseStatus"] == "200" &&
+            responseData["data"] != null) {
+          final data = responseData["data"];
+          final responseParam = data["responseParameter"] ?? {};
 
-          serialNumber.value = formattedEsn;
-          modelNumber.value = data['model_no']?.toString() ?? "Unknown Model";
+          serialNumber.value =
+              responseParam["engineSerialNumber"]?.toString() ?? "";
+
+          modelNumber.value =
+              responseParam["modelNo"]?.toString() ?? "Unknown Model";
+
           variantCode.value =
-              data['variant_code']?.toString() ?? "Unknown Variant";
-          modelValidationId.value = data['id']?.toString() ?? "";
+              responseParam["varientCode"]?.toString() ?? "Unknown Variant";
 
-          print(
-              "✅ [ESN DATA] Model: ${modelNumber.value}, Variant: ${variantCode.value}");
-          LogFile.write(
-              "✅ [ESN DATA] Model: ${modelNumber.value}, Variant: ${variantCode.value}");
+          modelValidationId.value = data["testID"]?.toString() ?? "";
 
+          print("✅ ESN : ${serialNumber.value}");
+          print("✅ Model : ${modelNumber.value}");
+          print("✅ Variant : ${variantCode.value}");
           await loadSensorsFromRecipe();
           isValidated.value = true;
 
-          Get.snackbar("Success", "ESN Validated",
-              backgroundColor: Colors.green, colorText: Colors.white);
+          Get.snackbar(
+            "Success",
+            responseData["messages"]?[0]?["message"] ?? "ESN Validated",
+          );
         } else {
           Get.snackbar(
-            "Invalid ESN",
-            responseData['message'] ?? "No data found for this ESN",
-            backgroundColor: Colors.orange,
+            "Failed",
+            responseData["messages"]?[0]?["message"] ?? "ESN Validation Failed",
           );
         }
       } else if (response.statusCode == 401) {
         print("🚨 [UNAUTHORIZED] Token is invalid or expired.");
-        LogFile.write("🚨 [UNAUTHORIZED] Token is invalid or expired.");
+        LogFile.write(
+          "🚨 [UNAUTHORIZED] Token is invalid or expired.",
+        );
 
         await AppPreferences.clearToken();
-        Get.snackbar("Session Expired", "Please login again",
-            backgroundColor: Colors.redAccent, colorText: Colors.white);
+
+        Get.snackbar(
+          "Session Expired",
+          "Please login again",
+          backgroundColor: Colors.redAccent,
+          colorText: Colors.white,
+        );
+
         Get.offAllNamed(Routes.loginScreen);
       } else {
         Get.snackbar(
@@ -272,46 +303,69 @@ class ESNController extends GetxController {
         );
       }
     } on SocketException {
-      // ✅ Log network error
-      DevService.instance.insertAPICall(AppAPIsCall(
-        id: "${DateTime.now().millisecondsSinceEpoch} ${DateTime.now().toIso8601String()}",
-        type: 'POST ERROR',
-        path: AppURLs.engineNumberCheck,
-        dateTime: DateTime.now(),
-        data: requestBody,
-        response: {
-          "error": "SocketException",
-          "message": "No internet connection"
-        },
-      ));
-      Get.snackbar("No Connection", "Check your internet and try again",
-          backgroundColor: Colors.redAccent, colorText: Colors.white);
+      DevService.instance.insertAPICall(
+        AppAPIsCall(
+          id: "${DateTime.now().millisecondsSinceEpoch} ${DateTime.now().toIso8601String()}",
+          type: 'POST ERROR',
+          path: AppURLs.engineNumberCheck,
+          dateTime: DateTime.now(),
+          data: requestBody,
+          response: {
+            "error": "SocketException",
+            "message": "No internet connection",
+          },
+        ),
+      );
+
+      Get.snackbar(
+        "No Connection",
+        "Check your internet and try again",
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+      );
     } on TimeoutException {
-      // ✅ Log timeout
-      DevService.instance.insertAPICall(AppAPIsCall(
-        id: "${DateTime.now().millisecondsSinceEpoch} ${DateTime.now().toIso8601String()}",
-        type: 'POST TIMEOUT',
-        path: AppURLs.engineNumberCheck,
-        dateTime: DateTime.now(),
-        data: requestBody,
-        response: {"error": "TimeoutException", "message": "Request timed out"},
-      ));
-      Get.snackbar("Timeout", "Server took too long to respond",
-          backgroundColor: Colors.orange, colorText: Colors.white);
+      DevService.instance.insertAPICall(
+        AppAPIsCall(
+          id: "${DateTime.now().millisecondsSinceEpoch} ${DateTime.now().toIso8601String()}",
+          type: 'POST TIMEOUT',
+          path: AppURLs.engineNumberCheck,
+          dateTime: DateTime.now(),
+          data: requestBody,
+          response: {
+            "error": "TimeoutException",
+            "message": "Request timed out",
+          },
+        ),
+      );
+
+      Get.snackbar(
+        "Timeout",
+        "Server took too long to respond",
+        backgroundColor: Colors.orange,
+        colorText: Colors.white,
+      );
     } catch (e) {
-      // ✅ Log exception
-      DevService.instance.insertAPICall(AppAPIsCall(
-        id: "${DateTime.now().millisecondsSinceEpoch} ${DateTime.now().toIso8601String()}",
-        type: 'POST EXCEPTION',
-        path: AppURLs.engineNumberCheck,
-        dateTime: DateTime.now(),
-        data: requestBody,
-        response: {"error": "Exception", "message": e.toString()},
-      ));
+      DevService.instance.insertAPICall(
+        AppAPIsCall(
+          id: "${DateTime.now().millisecondsSinceEpoch} ${DateTime.now().toIso8601String()}",
+          type: 'POST EXCEPTION',
+          path: AppURLs.engineNumberCheck,
+          dateTime: DateTime.now(),
+          data: requestBody,
+          response: {
+            "error": "Exception",
+            "message": e.toString(),
+          },
+        ),
+      );
+
       print("❌ [ESN VALIDATION ERROR] $e");
       LogFile.write("❌ [ESN VALIDATION ERROR] $e");
 
-      Get.snackbar("Error", "Failed to connect to server");
+      Get.snackbar(
+        "Error",
+        "Failed to connect to server",
+      );
     } finally {
       isLoading.value = false;
     }
@@ -969,8 +1023,8 @@ class ESNController extends GetxController {
     // =====================================================
     // 🖥 UI UPDATE
     // =====================================================
-     s['val'] = actualValue.toStringAsFixed(3);
-     
+    s['val'] = actualValue.toStringAsFixed(3);
+
     print("🧩 STEP 5: UI Value = ${s['val']}");
     LogFile.write("🧩 STEP 5: UI Value = ${s['val']}");
 

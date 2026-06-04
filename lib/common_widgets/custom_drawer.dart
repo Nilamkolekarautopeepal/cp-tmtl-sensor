@@ -356,45 +356,102 @@ class CustomDrawer extends StatelessWidget {
         );
       }
 
-      return ExpansionTile(
-        leading: Icon(Icons.settings_outlined,
-            color: Colors.blue.shade600, size: iconSize),
-        title: Text(
-          "Settings",
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: GetPlatform.isWindows ? 16 : 14,
-            color: Colors.black87,
-          ),
-        ),
-        iconColor: Colors.blue.shade600,
-        collapsedIconColor: Colors.grey,
-        childrenPadding: const EdgeInsets.only(left: 20), // Indent sub-items
-        children: [
-          _buildSubTile(Icons.electrical_services_outlined, "PLC Configuration",
-              Routes.settingsScreen),
-          _buildSubTile(Icons.analytics_outlined, "Sensor Analysis",
-              Routes.sensorAnalysis),
-        ],
-      );
+      // return ExpansionTile(
+      //   leading: Icon(Icons.settings_outlined,
+      //       color: Colors.blue.shade600, size: iconSize),
+      //   title: Text(
+      //     "Settings",
+      //     style: TextStyle(
+      //       fontWeight: FontWeight.w600,
+      //       fontSize: GetPlatform.isWindows ? 16 : 14,
+      //       color: Colors.black87,
+      //     ),
+      //   ),
+      //   iconColor: Colors.blue.shade600,
+      //   collapsedIconColor: Colors.grey,
+      //   childrenPadding: const EdgeInsets.only(left: 20), // Indent sub-items
+      //   children: [
+      //     _buildSubTile(Icons.electrical_services_outlined, "PLC Configuration",
+      //         Routes.settingsScreen),
+      //     _buildSubTile(Icons.analytics_outlined, "Sensor Analysis",
+      //         Routes.sensorAnalysis),
+      //   ],
+      // );
+      return Material(
+  color: Colors.transparent,
+  child: ExpansionTile(
+    leading: Icon(
+      Icons.settings_outlined,
+      color: Colors.blue.shade600,
+      size: iconSize,
+    ),
+    title: Text(
+      "Settings",
+      style: TextStyle(
+        fontWeight: FontWeight.w600,
+        fontSize: GetPlatform.isWindows ? 16 : 14,
+        color: Colors.black87,
+      ),
+    ),
+    iconColor: Colors.blue.shade600,
+    collapsedIconColor: Colors.grey,
+    childrenPadding: const EdgeInsets.only(left: 20),
+    children: [
+      _buildSubTile(
+        Icons.electrical_services_outlined,
+        "PLC Configuration",
+        Routes.settingsScreen,
+      ),
+      _buildSubTile(
+        Icons.analytics_outlined,
+        "Sensor Analysis",
+        Routes.sensorAnalysis,
+      ),
+    ],
+  ),
+);
     });
   }
 
+  // Widget _buildSubTile(IconData icon, String title, String route) {
+  //   return ListTile(
+  //     visualDensity: VisualDensity.compact,
+  //     leading: Icon(icon, color: Colors.blue.shade400, size: 25),
+  //     title: Text(
+  //       title,
+  //       style: const TextStyle(
+  //           fontSize: 18,
+  //           color: Colors.black54,
+  //           fontWeight: FontWeight.w500,
+  //           fontFamily: "Roboto-Regular"),
+  //     ),
+  //     onTap: () => Get.toNamed(route),
+  //   );
+  // }
+
   Widget _buildSubTile(IconData icon, String title, String route) {
-    return ListTile(
+  return Material(
+    color: Colors.transparent,
+    child: ListTile(
       visualDensity: VisualDensity.compact,
-      leading: Icon(icon, color: Colors.blue.shade400, size: 25),
+      leading: Icon(
+        icon,
+        color: Colors.blue.shade400,
+        size: 25,
+      ),
       title: Text(
         title,
         style: const TextStyle(
-            fontSize: 18,
-            color: Colors.black54,
-            fontWeight: FontWeight.w500,
-            fontFamily: "Roboto-Regular"),
+          fontSize: 18,
+          color: Colors.black54,
+          fontWeight: FontWeight.w500,
+          fontFamily: "Roboto-Regular",
+        ),
       ),
       onTap: () => Get.toNamed(route),
-    );
-  }
+    ),
+  );
+}
 
   // Widget _buildHeader() {
   //   return Container(

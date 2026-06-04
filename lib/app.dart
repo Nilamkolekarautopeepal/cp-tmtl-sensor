@@ -286,107 +286,199 @@ class App {
   bool get samplePayment => _samplePayment ?? true;
   bool get isProd => _baseURLType == AtomURLType.DEV;
 
-  void initAndRunApp({
-    required bool appLog,
-    required bool apiLog,
-    required bool devMode,
-    required bool setDefault,
-    required bool samplePayment,
-    required String baseURLType,
-  }) {
-    runZonedGuarded(
-      () async {
-        WidgetsFlutterBinding.ensureInitialized();
-        print('✅ Step 1: WidgetsFlutterBinding initialized');
+//   void initAndRunApp({
+//     required bool appLog,
+//     required bool apiLog,
+//     required bool devMode,
+//     required bool setDefault,
+//     required bool samplePayment,
+//     required String baseURLType,
+//   }) {
+//     runZonedGuarded(
+//       () async {
+//         WidgetsFlutterBinding.ensureInitialized();
+//         print('✅ Step 1: WidgetsFlutterBinding initialized');
 
-        // ── Desktop window setup ──────────────────────────────
-        if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
-          await windowManager.ensureInitialized();
-          print('✅ Step 2: WindowManager initialized');
+//         // ── Desktop window setup ──────────────────────────────
+//         if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
+//           await windowManager.ensureInitialized();
+//           print('✅ Step 2: WindowManager initialized');
 
-          const WindowOptions windowOptions = WindowOptions(
-            center: true,
-            title: "CP TMTL Sensor Zig",
-            titleBarStyle: TitleBarStyle.normal,
-            size: Size(1280, 720),
-            minimumSize: Size(800, 600),
-          );
+//           const WindowOptions windowOptions = WindowOptions(
+//             center: true,
+//             title: "CP TMTL Sensor Zig",
+//             titleBarStyle: TitleBarStyle.normal,
+//             size: Size(1280, 720),
+//             minimumSize: Size(800, 600),
+//           );
 
-          await windowManager.waitUntilReadyToShow(windowOptions, () async {
-            await windowManager.maximize();
-            await windowManager.show();
-            await windowManager.focus();
-          });
-          print('✅ Step 3: Window shown and maximized');
-        }
+//           await windowManager.waitUntilReadyToShow(windowOptions, () async {
+//             await windowManager.maximize();
+//             await windowManager.show();
+//             await windowManager.focus();
+//           });
+//           print('✅ Step 3: Window shown and maximized');
+//         }
 
-        // ── GetStorage ────────────────────────────────────────
-        // await GetStorage.init();
-        // print('✅ Step 4: GetStorage initialized');
+//         // ── GetStorage ────────────────────────────────────────
+//         // await GetStorage.init();
+//         // print('✅ Step 4: GetStorage initialized');
 
-// ── GetStorage ────────────────────────────────────────
-try {
-  await GetStorage.init();
-  print('✅ Step 4: GetStorage initialized');
-} catch (e) {
-  print('⚠️ GetStorage skipped: $e');
-  // continue anyway
-}
+// // ── GetStorage ────────────────────────────────────────
+// try {
+//   await GetStorage.init();
+//   print('✅ Step 4: GetStorage initialized');
+// } catch (e) {
+//   print('⚠️ GetStorage skipped: $e');
+//   // continue anyway
+// }
 
-        // ── App config ────────────────────────────────────────
-        _devMode = devMode;
-        _appLog = appLog;
-        _apiLog = apiLog;
-        _setDefault = setDefault;
-        _baseURLType = baseURLType;
-        _samplePayment = samplePayment;
-        print('✅ Step 5: App config set');
+//         // ── App config ────────────────────────────────────────
+//         _devMode = devMode;
+//         _appLog = appLog;
+//         _apiLog = apiLog;
+//         _setDefault = setDefault;
+//         _baseURLType = baseURLType;
+//         _samplePayment = samplePayment;
+//         print('✅ Step 5: App config set');
 
-        // ── Mobile only settings ──────────────────────────────
-        if (Platform.isAndroid || Platform.isIOS) {
-          await SystemChrome.setEnabledSystemUIMode(
-            SystemUiMode.immersiveSticky,
-          );
-          await SystemChrome.setPreferredOrientations([
-            DeviceOrientation.landscapeLeft,
-            DeviceOrientation.landscapeRight,
-          ]);
-          print('✅ Step 6: Mobile orientation set');
-        }
+//         // ── Mobile only settings ──────────────────────────────
+//         if (Platform.isAndroid || Platform.isIOS) {
+//           await SystemChrome.setEnabledSystemUIMode(
+//             SystemUiMode.immersiveSticky,
+//           );
+//           await SystemChrome.setPreferredOrientations([
+//             DeviceOrientation.landscapeLeft,
+//             DeviceOrientation.landscapeRight,
+//           ]);
+//           print('✅ Step 6: Mobile orientation set');
+//         }
 
-        // ── Error widget ──────────────────────────────────────
-        ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
-          print('❌ Flutter Error: ${errorDetails.exception}');
-          print('❌ Stack: ${errorDetails.stack}');
-          return AppErrorWidget(errorDetails: errorDetails);
-        };
+//         // ── Error widget ──────────────────────────────────────
+//         ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
+//           print('❌ Flutter Error: ${errorDetails.exception}');
+//           print('❌ Stack: ${errorDetails.stack}');
+//           return AppErrorWidget(errorDetails: errorDetails);
+//         };
 
-        initLogger();
-        print('✅ Step 7: Logger initialized');
+//         initLogger();
+//         print('✅ Step 7: Logger initialized');
 
-        print('✅ Step 8: Calling runApp...');
-        runApp(const MyApp());
-        print('✅ Step 9: runApp called successfully');
-      },
-      (error, stack) {
-        print('❌ FATAL ERROR CAUGHT: $error');
-        print('❌ STACK TRACE: $stack');
-        ErrorHandlerService.instance.appRecordError(error, stack);
-      },
+//         print('✅ Step 8: Calling runApp...');
+//         runApp(const MyApp());
+//         print('✅ Step 9: runApp called successfully');
+//       },
+//       (error, stack) {
+//         print('❌ FATAL ERROR CAUGHT: $error');
+//         print('❌ STACK TRACE: $stack');
+//         ErrorHandlerService.instance.appRecordError(error, stack);
+//       },
+//     );
+//   }
+
+Future<void> initAndRunApp({
+  required bool appLog,
+  required bool apiLog,
+  required bool devMode,
+  required bool setDefault,
+  required bool samplePayment,
+  required String baseURLType,
+}) async {
+  WidgetsFlutterBinding.ensureInitialized();
+  print('✅ Step 1: WidgetsFlutterBinding initialized');
+
+  // Desktop window setup
+  if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
+    await windowManager.ensureInitialized();
+    print('✅ Step 2: WindowManager initialized');
+
+    const WindowOptions windowOptions = WindowOptions(
+      center: true,
+      title: "CP TMTL Sensor Zig",
+      titleBarStyle: TitleBarStyle.normal,
+      size: Size(1280, 720),
+      minimumSize: Size(800, 600),
     );
+
+    await windowManager.waitUntilReadyToShow(windowOptions, () async {
+      await windowManager.maximize();
+      await windowManager.show();
+      await windowManager.focus();
+    });
+
+    print('✅ Step 3: Window shown and maximized');
   }
+
+  // GetStorage
+  try {
+    await GetStorage.init();
+    print('✅ Step 4: GetStorage initialized');
+  } catch (e) {
+    print('⚠️ GetStorage skipped: $e');
+  }
+
+  // App config
+  _devMode = devMode;
+  _appLog = appLog;
+  _apiLog = apiLog;
+  _setDefault = setDefault;
+  _baseURLType = baseURLType;
+  _samplePayment = samplePayment;
+
+  print('✅ Step 5: App config set');
+
+  // Mobile settings
+  if (Platform.isAndroid || Platform.isIOS) {
+    await SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.immersiveSticky,
+    );
+
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+
+    print('✅ Step 6: Mobile orientation set');
+  }
+
+  // Error widget
+  ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
+    print('❌ Flutter Error: ${errorDetails.exception}');
+    print('❌ Stack: ${errorDetails.stack}');
+    return AppErrorWidget(errorDetails: errorDetails);
+  };
+
+  initLogger();
+
+  print('✅ Step 7: Logger initialized');
+  print('✅ Step 8: Calling runApp...');
+
+  runApp(const MyApp());
+
+  print('✅ Step 9: runApp called successfully');
+}
 }
 
 // ── main.dart entry point ─────────────────────────────────────────────────────
 Future<void> main() async {
-  App.instance.initAndRunApp(
-    appLog: true,
-    apiLog: false,
-    devMode: true,
-    setDefault: true,
-    samplePayment: true,
-    baseURLType: AtomURLType.PROD,
-  );
+  runZonedGuarded(() async {
+    await App.instance.initAndRunApp(
+      appLog: true,
+      apiLog: false,
+      devMode: true,
+      setDefault: true,
+      samplePayment: true,
+      baseURLType: AtomURLType.PROD,
+    );
+  }, (error, stack) {
+    print('❌ FATAL ERROR CAUGHT: $error');
+    print('❌ STACK TRACE: $stack');
+
+    ErrorHandlerService.instance.appRecordError(
+      error,
+      stack,
+    );
+  });
 }
 
 // ── Root widget ───────────────────────────────────────────────────────────────
