@@ -366,7 +366,7 @@ class DashboardController extends GetxController {
       // URL
       // =================================================
  
-      const url = "http://139.59.76.174:8080/api/v1/support/traceability/test";
+      const url = "https://uatalw4siite.tmtl.net/itracex-traceabilityservice/v1/api/traceability/test";
  
       // =================================================
       // DATE
@@ -442,7 +442,7 @@ class DashboardController extends GetxController {
         AppAPIsCall(
           id: "${DateTime.now().millisecondsSinceEpoch} ${DateTime.now().toIso8601String()}",
           type: 'POST ${response.statusCode}',
-          path: '/api/v1/support/traceability/test',
+          path: 'url: $url',
           dateTime: DateTime.now(),
           data: requestBody,
           response: parsedResponse,

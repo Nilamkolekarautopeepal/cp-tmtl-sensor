@@ -6,10 +6,16 @@ class AtomURLType {
   static const String PROD = 'PROD';
 }
 
+// class AppEnvironment {
+//   static const String _localUrl = "http://139.59.76.174:8080/api/v1/";
+//   static const String _devUrl = 'http://139.59.76.174:8080/api/v1/';
+//   static const String _prodUrl = 'http://139.59.76.174:8080/api/v1/';
+
 class AppEnvironment {
-  static const String _localUrl = "http://139.59.76.174:8080/api/v1/";
-  static const String _devUrl = 'http://139.59.76.174:8080/api/v1/';
-  static const String _prodUrl = 'http://139.59.76.174:8080/api/v1/';
+  static const String _localUrl = "https://uatalw4siite.tmtl.net/";
+  static const String _devUrl = "https://uatalw4siite.tmtl.net/";
+  static const String _prodUrl = "https://uatalw4siite.tmtl.net/";
+
 
   static bool get baseProdInstance {
     if (baseUrl == _prodUrl) {
@@ -29,6 +35,6 @@ class AppEnvironment {
         return _localUrl;
     }
 
-    return "http://139.59.76.174:8080/api/v1/";
+    return "https://uatalw4siite.tmtl.net/";
   }
 }
