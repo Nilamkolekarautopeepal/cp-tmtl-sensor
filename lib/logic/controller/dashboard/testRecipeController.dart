@@ -183,43 +183,40 @@ class TestRecipeController extends GetxController {
 // DELETE RECIPE
 // ==========================================
   Future<void> deleteRecipe(
-  Recipe recipe,
-) async {
-  try {
-    // REMOVE FROM UI
-    recipeList.remove(recipe);
+    Recipe recipe,
+  ) async {
+    try {
+      // REMOVE FROM UI
+      recipeList.remove(recipe);
 
-    // REMOVE FROM STORAGE
-    await AppPreferences
-        .deleteRecipeForCurrentUser(
-      recipe.model!,
-    );
+      // REMOVE FROM STORAGE
+      await AppPreferences.deleteRecipeForCurrentUser(
+        recipe.model!,
+      );
 
-    // REFRESH UI
-    recipeList.refresh();
+      // REFRESH UI
+      recipeList.refresh();
 
-    print(
-      "🗑️ Recipe Deleted : ${recipe.model}",
-    );
+      print(
+        "🗑️ Recipe Deleted : ${recipe.model}",
+      );
 
-    Get.dialog(
-      CustomPopup(
-        title: "Delete Success",
-        message:
-            "Recipe deleted successfully.",
-      ),
-    );
-  } catch (e) {
-    print("❌ DELETE ERROR : $e");
+      Get.dialog(
+        CustomPopup(
+          title: "Delete Success",
+          message: "Recipe deleted successfully.",
+        ),
+      );
+    } catch (e) {
+      print("❌ DELETE ERROR : $e");
 
-    Get.dialog(
-      CustomPopup(
-        title: "Delete Failed",
-        message: "Error : $e",
-        isError: true,
-      ),
-    );
+      Get.dialog(
+        CustomPopup(
+          title: "Delete Failed",
+          message: "Error : $e",
+          isError: true,
+        ),
+      );
+    }
   }
 }
-}
-

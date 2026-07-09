@@ -589,11 +589,12 @@ class DashboardController extends GetxController {
   // =====================================================
 
   final List<String> modelNos = [
-    "VC001",
-    "TCD 2.2 L4",
+
+    "TD 2.2 L3",
+    "TCD 2.2 L3",
     "TCD 2.9 L4",
-    "D 2.9 L4",
-    "TD 2.9",
+    "D 2.2 L3",
+    "TD 2.9 L4",
   ];
 
   // =====================================================
@@ -678,7 +679,7 @@ class DashboardController extends GetxController {
             "${fromDate.year}-${fromDate.month.toString().padLeft(2, '0')}-${fromDate.day.toString().padLeft(2, '0')}",
         "toDate":
             "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}",
-        "modelNo": modelNos,
+        "modelNo":  modelNos,
       };
 
       print("=================================================");
