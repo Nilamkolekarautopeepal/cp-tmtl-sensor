@@ -189,6 +189,7 @@ class RecipeAdditionScreen extends StatelessWidget {
                                                         size: isDesktop
                                                             ? 22
                                                             : 20),
+                                                            
                                                     onPressed: () => controller
                                                         .editSensor(sensor),
                                                   ),
