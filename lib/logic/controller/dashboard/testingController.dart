@@ -970,7 +970,7 @@
 //     // 🖥 UI UPDATE
 //     // =====================================================
 //      s['val'] = actualValue.toStringAsFixed(3);
-     
+
 //     print("🧩 STEP 5: UI Value = ${s['val']}");
 //     LogFile.write("🧩 STEP 5: UI Value = ${s['val']}");
 
@@ -3372,13 +3372,12 @@ class ESNController extends GetxController {
     print("\n===================================================");
     print("🔍 [PROCESSING] Name: $name | Register: $reg");
     print("📥 [PLC RAW] Value: $rawX");
-
     // =====================================================
-    // ⚡ CURRENT SENSOR
-    // =====================================================
-    if (typeStr.contains("current5A")) {
+// ⚡ CURRENT SENSOR
+// =====================================================
+    if (typeStr.contains("current5a")) {
       // Print typeStr
-      print("🧩 typeStr = $typeStr"); 
+      print("🧩 typeStr = $typeStr");
       print("⚡ [MODE] CURRENT SENSOR 5A");
 
       // STEP 1: Raw Input
@@ -3398,16 +3397,16 @@ class ESNController extends GetxController {
 
       // STEP 4: Current Formula
       print("🧩 STEP 4: Current Calculation");
-      print("   -> Formula: I = (Vout - 2.5) / 0.185"); //0.185
+      print("   -> Formula: I = (Vout - 2.5) / 0.185");
       print("   -> Substitution: ($vout - $offset) / 0.185");
 
       actualValue = (vout - offset) / 0.185;
 
       print("   -> Result Current: ${actualValue.toStringAsFixed(4)} A");
-    } else if (typeStr.contains("current20A")) {
+    } else if (typeStr.contains("current20a")) {
       // Print typeStr
-      print("🧩 typeStr = $typeStr"); 
-      print("⚡ [MODE] CURRENT SENSOR 20 A");
+      print("🧩 typeStr = $typeStr");
+      print("⚡ [MODE] CURRENT SENSOR 20A");
 
       // STEP 1: Raw Input
       print("🧩 STEP 1: Raw Input");
@@ -3426,40 +3425,101 @@ class ESNController extends GetxController {
 
       // STEP 4: Current Formula
       print("🧩 STEP 4: Current Calculation");
-      print("   -> Formula: I = (Vout - 2.5) / 0.100"); //0.185
+      print("   -> Formula: I = (Vout - 2.5) / 0.100");
       print("   -> Substitution: ($vout - $offset) / 0.100");
 
       actualValue = (vout - offset) / 0.100;
 
       print("   -> Result Current: ${actualValue.toStringAsFixed(4)} A");
     }
-  //  else if (typeStr.contains("current")) {
-  //     print("⚡ [MODE] CURRENT SENSOR");
 
-  //     // STEP 1: Raw Input
-  //     print("🧩 STEP 1: Raw Input");
-  //     print("   -> Raw PLC Value: $rawX");
+    // // =====================================================
+    // // ⚡ CURRENT SENSOR
+    // // =====================================================
+    // if (typeStr.contains("current5A")) {
+    //   // Print typeStr
+    //   print("🧩 typeStr = $typeStr");
+    //   print("⚡ [MODE] CURRENT SENSOR 5A");
 
-  //     // STEP 2: Voltage conversion
-  //     double vout = rawX.toDouble() / 1000.0;
-  //     print("🧩 STEP 2: Voltage Conversion");
-  //     print("   -> Vout = rawX / 1000 = $vout V");
+    //   // STEP 1: Raw Input
+    //   print("🧩 STEP 1: Raw Input");
+    //   print("   -> Raw PLC Value: $rawX");
 
-  //     // STEP 3: Offset
-  //     double offset = 2.5;
-  //     print("🧩 STEP 3: Offset Removal");
-  //     print("   -> Offset = $offset V");
-  //     print("   -> Vout - Offset = ${vout - offset}");
+    //   // STEP 2: Voltage conversion
+    //   double vout = rawX.toDouble() / 1000.0;
+    //   print("🧩 STEP 2: Voltage Conversion");
+    //   print("   -> Vout = rawX / 1000 = $vout V");
 
-  //     // STEP 4: Current Formula
-  //     print("🧩 STEP 4: Current Calculation");
-  //     print("   -> Formula: I = (Vout - 2.5) / 0.185"); //0.185
-  //     print("   -> Substitution: ($vout - $offset) / 0.185");
+    //   // STEP 3: Offset
+    //   double offset = 2.5;
+    //   print("🧩 STEP 3: Offset Removal");
+    //   print("   -> Offset = $offset V");
+    //   print("   -> Vout - Offset = ${vout - offset}");
 
-  //     actualValue = (vout - offset) / 0.185;
+    //   // STEP 4: Current Formula
+    //   print("🧩 STEP 4: Current Calculation");
+    //   print("   -> Formula: I = (Vout - 2.5) / 0.185"); //0.185
+    //   print("   -> Substitution: ($vout - $offset) / 0.185");
 
-  //     print("   -> Result Current: ${actualValue.toStringAsFixed(4)} A");
-  //   }
+    //   actualValue = (vout - offset) / 0.185;
+
+    //   print("   -> Result Current: ${actualValue.toStringAsFixed(4)} A");
+    // } else if (typeStr.contains("current20A")) {
+    //   // Print typeStr
+    //   print("🧩 typeStr = $typeStr");
+    //   print("⚡ [MODE] CURRENT SENSOR 20 A");
+
+    //   // STEP 1: Raw Input
+    //   print("🧩 STEP 1: Raw Input");
+    //   print("   -> Raw PLC Value: $rawX");
+
+    //   // STEP 2: Voltage conversion
+    //   double vout = rawX.toDouble() / 1000.0;
+    //   print("🧩 STEP 2: Voltage Conversion");
+    //   print("   -> Vout = rawX / 1000 = $vout V");
+
+    //   // STEP 3: Offset
+    //   double offset = 2.5;
+    //   print("🧩 STEP 3: Offset Removal");
+    //   print("   -> Offset = $offset V");
+    //   print("   -> Vout - Offset = ${vout - offset}");
+
+    //   // STEP 4: Current Formula
+    //   print("🧩 STEP 4: Current Calculation");
+    //   print("   -> Formula: I = (Vout - 2.5) / 0.100"); //0.185
+    //   print("   -> Substitution: ($vout - $offset) / 0.100");
+
+    //   actualValue = (vout - offset) / 0.100;
+
+    //   print("   -> Result Current: ${actualValue.toStringAsFixed(4)} A");
+    // }
+    //  else if (typeStr.contains("current")) {
+    //     print("⚡ [MODE] CURRENT SENSOR");
+
+    //     // STEP 1: Raw Input
+    //     print("🧩 STEP 1: Raw Input");
+    //     print("   -> Raw PLC Value: $rawX");
+
+    //     // STEP 2: Voltage conversion
+    //     double vout = rawX.toDouble() / 1000.0;
+    //     print("🧩 STEP 2: Voltage Conversion");
+    //     print("   -> Vout = rawX / 1000 = $vout V");
+
+    //     // STEP 3: Offset
+    //     double offset = 2.5;
+    //     print("🧩 STEP 3: Offset Removal");
+    //     print("   -> Offset = $offset V");
+    //     print("   -> Vout - Offset = ${vout - offset}");
+
+    //     // STEP 4: Current Formula
+    //     print("🧩 STEP 4: Current Calculation");
+    //     print("   -> Formula: I = (Vout - 2.5) / 0.185"); //0.185
+    //     print("   -> Substitution: ($vout - $offset) / 0.185");
+
+    //     actualValue = (vout - offset) / 0.185;
+
+    //     print("   -> Result Current: ${actualValue.toStringAsFixed(4)} A");
+    //   }
 
     // =====================================================
     // 🔌 RESISTANCE SENSOR
@@ -3495,14 +3555,14 @@ class ESNController extends GetxController {
 
       //actualValue = (r1 * vout) / denominator;
       // STEP 5: Final Resistance Value without decimal
-       actualValue = ((r1 * vout) / denominator).round().toDouble();
+      actualValue = ((r1 * vout) / denominator).round().toDouble();
 
       print("🧩 STEP 5: Resistance Result = $actualValue Ω");
     }
 
     // =====================================================
     // 📊 LINEAR SENSOR
-     // =================================
+    // =================================
     else {
       print("⚙️ [MODE] LINEAR");
 
@@ -4392,85 +4452,7 @@ class ESNController extends GetxController {
     return false;
   }
 
-  // Future<void> startTestingSequence() async {
-  //   final plcCtrl = Get.find<PLCController>();
-
-  //   if (!plcCtrl.isConnected.value) {
-  //     _showPopup("Hardware Offline", "Connect PLC first", true);
-  //     return;
-  //   }
-
-  //   if (isTesting.value) return;
-  //   isTesting.value = true;
-
-  //   for (var sensor in sensorResults) {
-  //     List operations = sensor['operations'] ?? [];
-
-  //     print("\n🚀 [SENSOR START] ${sensor['part']}");
-
-  //     for (int i = 0; i < operations.length; i++) {
-  //       var op = operations[i];
-
-  //       String operation = op.operation; // READ / WRITE
-  //       int reg = int.tryParse(op.registerAddress) ?? sensor['reg'];
-  //       int value = int.tryParse(op.value) ?? 0;
-
-  //       print("▶️ Step ${i + 1}: $operation | Reg: $reg | Val: $value");
-
-  //       // UI update
-  //       sensor['status'] = "TESTING...";
-  //       sensorResults.refresh();
-
-  //       // =========================
-  //       // 🔵 READ
-  //       // =========================
-  //       if (operation == "READ") {
-  //         bool received = await _readWithTimeout(reg);
-
-  //         if (!received) {
-  //           sensor['status'] = "TIMEOUT";
-  //           sensorResults.refresh();
-
-  //           _handleAbort("Timeout at ${sensor['part']}");
-  //           return;
-  //         }
-  //       }
-
-  //       // =========================
-  //       // 🟠 WRITE
-  //       // =========================
-  //       else if (operation == "WRITE") {
-  //         writeGeneratorDataRequest(reg, value);
-
-  //         await Future.delayed(const Duration(milliseconds: 500));
-  //       }
-
-  //       await Future.delayed(const Duration(milliseconds: 300));
-  //     }
-
-  //     // ✅ After all operations for this specific sensor are done
-  //     sensor['status'] = "OK";
-  //     sensorResults.refresh();
-  //   }
-
-  //   // ✅ SEQUENCE COMPLETE
-  //   isTesting.value = false;
-
-  //   // --- AUTOMATIC API CALL ---
-  //   print("📡 [AUTO-SAVE] Sequence complete. Sending data to server...");
-  //   await sendResultsToServer();
-
-  //   _showPopup(
-  //       "Complete", "Sequence executed and data saved successfully", false);
-  // }
-
-// ===============================================
-// SAME METHOD NAME : startTestingSequence()
-// USING RESULT API
-// ===============================================
-
-//old code //
-
+  
   Future<void> startTestingSequence() async {
     final plcCtrl = Get.find<PLCController>();
 
