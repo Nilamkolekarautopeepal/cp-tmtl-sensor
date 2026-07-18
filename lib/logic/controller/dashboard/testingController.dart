@@ -3369,68 +3369,212 @@ class ESNController extends GetxController {
 
     double actualValue = 0.0;
 
-    print("\n===================================================");
-    print("🔍 [PROCESSING] Name: $name | Register: $reg");
-    print("📥 [PLC RAW] Value: $rawX");
+   // print("\n===================================================");
+    //print("🔍 [PROCESSING] Name: $name | Register: $reg");
+    // print("📥 [PLC RAW] Value: $rawX");
     // =====================================================
 // ⚡ CURRENT SENSOR
 // =====================================================
-    if (typeStr.contains("current5a")) {
+    else if (typeStr.contains("current5a")) {
+      print("⚡ [MODE] CURRENT SENSOR");
+
+      
       // Print typeStr
+
       print("🧩 typeStr = $typeStr");
-      print("⚡ [MODE] CURRENT SENSOR 5A");
+
+   
 
       // STEP 1: Raw Input
+
       print("🧩 STEP 1: Raw Input");
       print("   -> Raw PLC Value: $rawX");
 
+      // LogFile.write("🧩 STEP 1: Raw Input");
+      // LogFile.write("   -> Raw PLC Value: $rawX");
+
       // STEP 2: Voltage conversion
+
       double vout = rawX.toDouble() / 1000.0;
+
       print("🧩 STEP 2: Voltage Conversion");
       print("   -> Vout = rawX / 1000 = $vout V");
 
+      // LogFile.write("🧩 STEP 2: Voltage Conversion");
+      // LogFile.write("   -> Vout = rawX / 1000 = $vout V");
+
       // STEP 3: Offset
+
       double offset = 2.5;
+
       print("🧩 STEP 3: Offset Removal");
       print("   -> Offset = $offset V");
       print("   -> Vout - Offset = ${vout - offset}");
 
+      // LogFile.write("🧩 STEP 3: Offset Removal");
+      // LogFile.write("   -> Offset = $offset V");
+      // LogFile.write("   -> Vout - Offset = ${vout - offset}");
+
       // STEP 4: Current Formula
+
       print("🧩 STEP 4: Current Calculation");
       print("   -> Formula: I = (Vout - 2.5) / 0.185");
       print("   -> Substitution: ($vout - $offset) / 0.185");
 
+      // LogFile.write("🧩 STEP 4: Current Calculation");
+      // LogFile.write("   -> Formula: I = (Vout - 2.5) / 0.185");
+      // LogFile.write("   -> Substitution: ($vout - $offset) / 0.185");
+
       actualValue = (vout - offset) / 0.185;
 
-      print("   -> Result Current: ${actualValue.toStringAsFixed(4)} A");
-    } else if (typeStr.contains("current20a")) {
+      print(
+        "   -> Result Current: ${actualValue.toStringAsFixed(4)} A",
+      );
+
+      // LogFile.write(
+      //   "   -> Result Current: ${actualValue.toStringAsFixed(4)} A",
+      // );
+    }
+
+    // cureent 20A  fa
+    else if (typeStr.contains("current20A")) {
+      print("⚡ [MODE] CURRENT SENSOR");
+
+      // LogFile.write("⚡ [MODE] CURRENT SENSOR");
+
       // Print typeStr
+
       print("🧩 typeStr = $typeStr");
-      print("⚡ [MODE] CURRENT SENSOR 20A");
+
+      // LogFile.write("🧩 typeStr = $typeStr");
 
       // STEP 1: Raw Input
+
       print("🧩 STEP 1: Raw Input");
       print("   -> Raw PLC Value: $rawX");
 
+      // LogFile.write("🧩 STEP 1: Raw Input");
+      // LogFile.write("   -> Raw PLC Value: $rawX");
+
       // STEP 2: Voltage conversion
+
       double vout = rawX.toDouble() / 1000.0;
+
       print("🧩 STEP 2: Voltage Conversion");
       print("   -> Vout = rawX / 1000 = $vout V");
 
+      // LogFile.write("🧩 STEP 2: Voltage Conversion");
+      // LogFile.write("   -> Vout = rawX / 1000 = $vout V");
+
       // STEP 3: Offset
+
       double offset = 2.5;
+
       print("🧩 STEP 3: Offset Removal");
       print("   -> Offset = $offset V");
       print("   -> Vout - Offset = ${vout - offset}");
 
+      // LogFile.write("🧩 STEP 3: Offset Removal");
+      // LogFile.write("   -> Offset = $offset V");
+      // LogFile.write("   -> Vout - Offset = ${vout - offset}");
+
       // STEP 4: Current Formula
+
       print("🧩 STEP 4: Current Calculation");
       print("   -> Formula: I = (Vout - 2.5) / 0.100");
       print("   -> Substitution: ($vout - $offset) / 0.100");
 
+      // LogFile.write("🧩 STEP 4: Current Calculation");
+      // LogFile.write("   -> Formula: I = (Vout - 2.5) / 0.100");
+      // LogFile.write("   -> Substitution: ($vout - $offset) / 0.100");
+
       actualValue = (vout - offset) / 0.100;
 
-      print("   -> Result Current: ${actualValue.toStringAsFixed(4)} A");
+      print(
+        "   -> Result Current: ${actualValue.toStringAsFixed(4)} A",
+      );
+
+      // LogFile.write(
+      //   "   -> Result Current: ${actualValue.toStringAsFixed(4)} A",
+      //);
+    }
+    // =====================================================
+    // 🔌 RESISTANCE SENSOR
+    // =====================================================
+    else if (typeStr.contains("resistance")) {
+      print("⚙️ [MODE] RESISTANCE");
+
+      // LogFile.write("⚙️ [MODE] RESISTANCE");
+
+      // Print typeStr
+
+      print("🧩 typeStr = $typeStr");
+
+      // LogFile.write("🧩 typeStr = $typeStr");
+
+      double defaultR1 = 1000.0;
+
+      if (typeStr.contains("resistance(2200)")) {
+        defaultR1 = 2200.0;
+      } else if (typeStr.contains("resistance(100)")) {
+        defaultR1 = 100.0;
+      }
+
+      // STEP 1: R1
+
+      double r1 = (s['multiplier'] as num?)?.toDouble() ?? defaultR1;
+
+      print("🧩 STEP 1: R1 = $r1");
+
+      // LogFile.write("🧩 STEP 1: R1 = $r1");
+
+      // STEP 2: Vin
+
+      double vin = (s['offset'] as num?)?.toDouble() ?? 5.0;
+
+      print("🧩 STEP 2: Vin = $vin");
+
+      // LogFile.write("🧩 STEP 2: Vin = $vin");
+
+      // STEP 3: Vout
+
+      double vout = (rawX.toDouble() / 1000.0) - 0.0001;
+
+      print("🧩 STEP 3: Vout = $vout");
+
+      // LogFile.write("🧩 STEP 3: Vout = $vout");
+
+      if (vout >= vin) {
+        vout = vin - 0.001;
+      }
+
+      if (vout < 0) {
+        vout = 0;
+      }
+
+      // STEP 4: Formula
+
+      double denominator = vin - vout;
+
+      print(
+        "🧩 STEP 4: Denominator = $denominator",
+      );
+
+      // LogFile.write(
+      //   "🧩 STEP 4: Denominator = $denominator",
+      // );
+
+      // STEP 5: Final Resistance Value
+
+      actualValue = ((r1 * vout) / denominator).round().toDouble();
+
+      print(
+        "🧩 STEP 5: Resistance Result = $actualValue Ω",
+      );
+
+      // LogFile.write(
+        //"🧩 STEP 5: Resistance Result = $actualValue Ω",
+     // );
     }
 
     // // =====================================================
