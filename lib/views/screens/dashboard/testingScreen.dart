@@ -173,63 +173,7 @@ class TestingScreen extends StatelessWidget {
                       fontSize: titleFontSize, fontWeight: FontWeight.bold)),
               const SizedBox(height: 15),
 
-              // Obx(() => Table(
-              //       columnWidths: const {
-              //         0: FlexColumnWidth(1), // Sr.
-              //         1: FlexColumnWidth(4), // Component
-              //         2: FlexColumnWidth(1.5), // Min
-              //         3: FlexColumnWidth(1.5), // Max
-              //         4: FlexColumnWidth(1.5),
-              //         5: FlexColumnWidth(1.5), // Val
-              //         6: FlexColumnWidth(2), // Result
-              //       },
-              //       border: TableBorder.all(color: Colors.black12),
-              //       children: [
-              //         // 1. HEADER ROW (Total 6 children)
-              //         TableRow(
-              //           decoration: BoxDecoration(color: Colors.grey[200]),
-              //           children: [
-              //             _buildCell("Register",
-              //                 isHeader: true, fontSize: tableCellFontSize),
-              //             _buildCell("Component",
-              //                 isHeader: true, fontSize: tableCellFontSize),
-              //             _buildCell("Min",
-              //                 isHeader: true, fontSize: tableCellFontSize),
-              //             _buildCell("Max",
-              //                 isHeader: true, fontSize: tableCellFontSize),
-              //             _buildCell("Unit",
-              //                 isHeader: true, fontSize: tableCellFontSize),
-              //             _buildCell("Val",
-              //                 isHeader: true, fontSize: tableCellFontSize),
-              //             _buildCell("Result",
-              //                 isHeader: true, fontSize: tableCellFontSize),
-              //           ],
-              //         ),
-
-              //         // 2. DATA ROWS (Must also have exactly 6 children)
-              //         ...controller.sensorResults.map((sensor) {
-              //           return TableRow(
-              //             children: [
-              //               _buildCell(sensor['reg'].toString(),
-              //                   fontSize: tableCellFontSize), // 1
-              //               _buildCell(sensor['part'],
-              //                   fontSize: tableCellFontSize,
-              //                   align: TextAlign.left), // 2
-              //               _buildCell(sensor['min'].toString(),
-              //                   fontSize: tableCellFontSize), // 3
-              //               _buildCell(sensor['max'].toString(),
-              //                   fontSize: tableCellFontSize), // 4
-              //               _buildCell(sensor['unit'].toString(),
-              //                   fontSize: tableCellFontSize),
-              //               _buildCell(sensor['val'].toString(),
-              //                   fontSize: tableCellFontSize), // 5
-              //               _buildStatusBadge(
-              //                   sensor['status'], tableCellFontSize), // 6
-              //             ],
-              //           );
-              //         }).toList(),
-              //       ],
-              //     ))
+        
               Obx(() => Column(
                     children: [
                       // ── HEADER ──
@@ -590,22 +534,6 @@ class TestingScreen extends StatelessWidget {
       ),
     );
   }
-
-  // Widget _buildCell(String text,
-  //     {required double fontSize,
-  //     bool isHeader = false,
-  //     TextAlign align = TextAlign.center}) {
-  //   return Padding(
-  //     padding: const EdgeInsets.all(12),
-  //     child: Center(
-  //       child: Text(text,
-  //           textAlign: align,
-  //           style: TextStyle(
-  //               fontSize: fontSize,
-  //               fontWeight: isHeader ? FontWeight.bold : FontWeight.normal)),
-  //     ),
-  //   );
-  // }
 
   InputDecoration _inputDecoration(String hint) {
     return InputDecoration(
