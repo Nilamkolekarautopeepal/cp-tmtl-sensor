@@ -1714,7 +1714,7 @@ class ESNController extends GetxController {
 
     return avg;
   }
-  
+
   Future<void> startTestingSequence() async {
     final plcCtrl = Get.find<PLCController>();
 
