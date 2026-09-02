@@ -12,9 +12,9 @@ class AtomURLType {
 //   static const String _prodUrl = 'http://139.59.76.174:8080/api/v1/';
 
 class AppEnvironment {
-  static const String _localUrl = "https://uatalw4siite.tmtl.net/";
-  static const String _devUrl = "https://uatalw4siite.tmtl.net/";
-  static const String _prodUrl = "https://uatalw4siite.tmtl.net/";
+  static const String _localUrl = "https://alw4siite.tmtl.net/";
+  static const String _devUrl = "https://alw4siite.tmtl.net/";
+  static const String _prodUrl = "https://alw4siite.tmtl.net/";
 
 
   static bool get baseProdInstance {
@@ -35,6 +35,6 @@ class AppEnvironment {
         return _localUrl;
     }
 
-    return "https://uatalw4siite.tmtl.net/";
+    return "https://alw4siite.tmtl.net/";
   }
 }
