@@ -575,7 +575,7 @@ class DashboardController extends GetxController {
   // =====================================================
 
   static const String dashboardApiUrl =
-      "https://uatalw4siite.tmtl.net/itracex-traceabilityservice/v1/api/traceability/test";
+      "https://alw4siite.tmtl.net/itracex-traceabilityservice/v1/api/traceability/test";
 
   // =====================================================
   // ENGINE MODELS

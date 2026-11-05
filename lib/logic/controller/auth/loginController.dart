@@ -471,7 +471,7 @@ class LoginController extends GetxController {
       /// =========================================
 
       const String loginUrl =
-          "https://uatalw4siite.tmtl.net/itracex-configservice/v1/api/auth/login";
+          "https://alw4siite.tmtl.net/itracex-configservice/v1/api/auth/login";
 
       print("🌐 URL : $loginUrl");
 

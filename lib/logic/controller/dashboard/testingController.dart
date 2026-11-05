@@ -2776,15 +2776,33 @@ class ESNController extends GetxController {
 
       return;
     }
+// old code
+    // final String formattedEsn = "$esn";
 
-    final String formattedEsn = "$esn";
+    // // ==========================================
+    // // REQUEST BODY
+    // // ==========================================
+    // final Map<String, dynamic> requestBody = {
+    //   "type": "SENSOR_TEST",
+    //   "stationID": "SENSOR_1",
+    //   "requestParameters": {
+    //     "engineSerialNumber": formattedEsn,
+    //   }
+    // };
+
+
+    //old code
+
+        final String formattedEsn = "$esn";
 
     // ==========================================
     // REQUEST BODY
     // ==========================================
+    final String? savedStationId = await AppPreferences.getStationId();
+
     final Map<String, dynamic> requestBody = {
       "type": "SENSOR_TEST",
-      "stationID": "SENSOR_1",
+      "stationID": savedStationId ?? "SENSOR_1",
       "requestParameters": {
         "engineSerialNumber": formattedEsn,
       }
